@@ -20,5 +20,7 @@ public interface ClickRepository {
 
     Long count();
 
+    //Long count(String hash); numero de clics para esa url
+
     List<Click> list(Long limit, Long offset);
 }
