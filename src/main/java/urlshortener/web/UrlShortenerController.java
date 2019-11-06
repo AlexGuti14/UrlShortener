@@ -9,8 +9,10 @@ import urlshortener.domain.ShortURL;
 import urlshortener.service.ClickService;
 import urlshortener.service.ShortURLService;
 
+
 import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
+import java.util.*;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
@@ -52,6 +54,19 @@ public class UrlShortenerController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
+    // Funcion Listar
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    public ResponseEntity<List<ShortURL>> listar(HttpServletRequest request) {
+        System.out.println("Ejecucion listar de URLShortenerController");
+        List<ShortURL> aDevolver = shortUrlService.list(100L, 100L);
+        if (aDevolver.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } else{
+        return new ResponseEntity<>(aDevolver, HttpStatus.CREATED);
+        }
+    }
+
 
     private String extractIP(HttpServletRequest request) {
         return request.getRemoteAddr();

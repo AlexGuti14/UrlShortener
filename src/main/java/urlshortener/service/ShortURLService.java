@@ -5,6 +5,8 @@ import urlshortener.domain.ShortURL;
 import urlshortener.repository.ShortURLRepository;
 import urlshortener.web.UrlShortenerController;
 
+import java.util.*;
+
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
@@ -19,6 +21,12 @@ public class ShortURLService {
 
     public ShortURL findByKey(String id) {
         return shortURLRepository.findByKey(id);
+    }
+
+    // FUncion para listar
+    public List<ShortURL> list(Long longitud, Long offset) {
+        System.out.println("Ejecucion listar de ShortURLService");
+        return shortURLRepository.list(longitud, offset);
     }
 
     public ShortURL save(String url, String sponsor, String ip) {

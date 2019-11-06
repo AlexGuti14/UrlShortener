@@ -110,6 +110,7 @@ public class ShortURLRepositoryImpl implements ShortURLRepository {
 
     @Override
     public List<ShortURL> list(Long limit, Long offset) {
+        System.out.println("Ejecucion listar de ShortURLRepositoryImpl");
         try {
             return jdbc.query("SELECT * FROM shorturl LIMIT ? OFFSET ?",
                     new Object[]{limit, offset}, rowMapper);

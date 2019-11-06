@@ -21,4 +21,29 @@ $(document).ready(
                     }
                 });
             });
-    });
+    },
+    function listar() {
+        $("#list").submit(
+            function () {
+                $.ajax({
+                    type: "GET",
+                    url: "/list",
+                    data: $(this).serialize(),
+                    success: function (msg) {
+                        $("#result").html(
+                            "<div class='alert alert-success lead'><a target='_blank' href='"
+                            + msg[0].target
+                            + "'>"
+                            + msg[0].target
+                            + "</a></div>");
+                    },
+                    error: function () {
+                        $("#result").html(
+                            "<div class='alert alert-danger lead'>ERROR</div>");
+                    }
+                });
+            }
+        )
+    }
+    
+    );
