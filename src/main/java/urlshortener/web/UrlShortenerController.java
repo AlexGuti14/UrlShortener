@@ -6,12 +6,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import urlshortener.domain.ShortURL;
+import urlshortener.QR.GenerarQR;
 import urlshortener.domain.Click;
 import urlshortener.service.ClickService;
 import urlshortener.service.ShortURLService;
 
 
 import javax.servlet.http.HttpServletRequest;
+
+import com.google.zxing.WriterException;
+
+import java.io.IOException;
 import java.net.URI;
 import java.util.*;
 
@@ -29,8 +34,7 @@ public class UrlShortenerController {
     }
 
     @RequestMapping(value = "/{id:(?!link|index).*}", method = RequestMethod.GET)
-    public ResponseEntity<?> redirectTo(@PathVariable String id,
-                                        HttpServletRequest request) {
+    public ResponseEntity<?> redirectTo(@PathVariable String id, HttpServletRequest request) {
         ShortURL l = shortUrlService.findByKey(id);
         if (l != null) {
             clickService.saveClick(id, extractIP(request));
@@ -42,10 +46,8 @@ public class UrlShortenerController {
 
     @RequestMapping(value = "/link", method = RequestMethod.POST)
     public ResponseEntity<ShortURL> shortener(@RequestParam("url") String url,
-                                              @RequestParam(value = "sponsor", required = false) String sponsor,
-                                              HttpServletRequest request) {
-        UrlValidator urlValidator = new UrlValidator(new String[]{"http",
-                "https"});
+            @RequestParam(value = "sponsor", required = false) String sponsor, HttpServletRequest request) {
+        UrlValidator urlValidator = new UrlValidator(new String[] { "http", "https" });
         if (urlValidator.isValid(url)) {
             ShortURL su = shortUrlService.save(url, sponsor, request.getRemoteAddr());
             HttpHeaders h = new HttpHeaders();
@@ -58,16 +60,18 @@ public class UrlShortenerController {
 
     // Funcion Listar
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public ResponseEntity<List<ShortURL>> listar(HttpServletRequest request) {
+    public ResponseEntity<List<ShortURL>> listar(HttpServletRequest request) throws WriterException, IOException {
         System.out.println("Ejecucion listar de URLShortenerController");
         List<ShortURL> aDevolver = shortUrlService.list(100L, 0L);
+
+        GenerarQR qr = new GenerarQR();
 
         Iterator<ShortURL> nombreIterator = aDevolver.iterator();
         while(nombreIterator.hasNext()){
             ShortURL elemento = nombreIterator.next();
             elemento.setClicks(clickService.clicksByHash(elemento.getHash()));
+            elemento.setQR(qr.getQRCodeImage(elemento.getHash(), 150, 150));
         }
-
 
         return new ResponseEntity<>(aDevolver, HttpStatus.CREATED);
     }
