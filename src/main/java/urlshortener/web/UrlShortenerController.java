@@ -59,11 +59,11 @@ public class UrlShortenerController {
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public ResponseEntity<List<ShortURL>> listar(HttpServletRequest request) {
         System.out.println("Ejecucion listar de URLShortenerController");
-        List<ShortURL> aDevolver = shortUrlService.list(100L, 100L);
+        List<ShortURL> aDevolver = shortUrlService.list(100L, 0L);
         if (aDevolver.isEmpty()){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } else{
-        return new ResponseEntity<>(aDevolver, HttpStatus.CREATED);
+            return new ResponseEntity<>(aDevolver, HttpStatus.CREATED);
         }
     }
 
