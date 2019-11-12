@@ -26,4 +26,9 @@ public class ClickService {
         log.info(cl != null ? "[" + hash + "] saved with id [" + cl.getId() + "]" : "[" + hash + "] was not saved");
     }
 
+    // Funcion para devolver los click por hash
+    public Long clicksByHash(String hash) {
+        return clickRepository.clicksByHash(hash);
+    }
+
 }

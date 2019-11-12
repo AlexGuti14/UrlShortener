@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import urlshortener.domain.ShortURL;
+import urlshortener.domain.Click;
 import urlshortener.service.ClickService;
 import urlshortener.service.ShortURLService;
 
@@ -60,11 +61,15 @@ public class UrlShortenerController {
     public ResponseEntity<List<ShortURL>> listar(HttpServletRequest request) {
         System.out.println("Ejecucion listar de URLShortenerController");
         List<ShortURL> aDevolver = shortUrlService.list(100L, 0L);
-        if (aDevolver.isEmpty()){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        } else{
-            return new ResponseEntity<>(aDevolver, HttpStatus.CREATED);
+
+        Iterator<ShortURL> nombreIterator = aDevolver.iterator();
+        while(nombreIterator.hasNext()){
+            ShortURL elemento = nombreIterator.next();
+            elemento.setClicks(clickService.clicksByHash(elemento.getHash()));
         }
+
+
+        return new ResponseEntity<>(aDevolver, HttpStatus.CREATED);
     }
 
 

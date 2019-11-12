@@ -4,14 +4,16 @@ $(document).ready(
             $.ajax({
                 type: "GET",
                 url: "/list",
-                success: function (respuesta) {
-                    var tabla = "<tr><th>URI</th><th>URI Acortada</th></tr>";
+                success: function (respuesta, res2) {
+                    var tabla = "<table id='result' align='center' border='1' WIDTH='1000' HEIGHT='100'> <tr><th>URI ACORTADA</th><th>URI ORIGINAL</th> <th>Clicks</th> <th>QR</th></tr>";
                     for (var i=0; i<respuesta.length;i++){
                         tabla += "<tr><td>";
-                        tabla += respuesta[i].target;
+                        tabla += "<a href='" + respuesta[i].hash + "'>" + respuesta[i].hash;
                         tabla += "</td><td>";
-                        tabla += respuesta[i].uri;      // ES NULL SIEMPRE
-                        tabla += "</td></tr>";
+                        tabla += "<a href='" + respuesta[i].target + "'>" + respuesta[i].target;
+                        tabla += "</td><td>";
+                        tabla +=  respuesta[i].clicks;
+                        tabla += "</td></tr> </table>";
                     }
                     document.getElementById("result").innerHTML = tabla;
                 },
