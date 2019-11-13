@@ -61,6 +61,26 @@ public class UrlShortenerController {
         }
     }
 
+    // Función para cargar CSV a base de datos
+    @RequestMapping(value = "/csv", method = RequestMethod.POST)
+    public void SaveCSV(@RequestParam("linklist") List<String> linklist, @RequestParam(value = "sponsor", required = false) String sponsor, HttpServletRequest request) throws IOException {
+      System.out.println("List recieved!");
+      ShortURL su = new ShortURL();
+      HttpHeaders h = new HttpHeaders();
+      Validator v = new Validator();
+      for (int i = 0; i < linklist.size(); i++){
+        linklist.set(i, linklist.get(i).replace("\"", ""));
+        linklist.set(i, linklist.get(i).replace("[", ""));
+        linklist.set(i, linklist.get(i).replace("]", ""));
+        System.out.println(linklist.get(i));
+        UrlValidator urlValidator = new UrlValidator(new String[]{"http",
+                "https"});
+        if (urlValidator.isValid(linklist.get(i)) && v.validate(linklist.get(i))){
+            su = shortUrlService.save(linklist.get(i), sponsor, request.getRemoteAddr());
+            h.setLocation(su.getUri());
+        }
+      }
+    }
     // Funcion Listar
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public ResponseEntity<List<ShortURL>> listar(HttpServletRequest request) throws WriterException, IOException {
