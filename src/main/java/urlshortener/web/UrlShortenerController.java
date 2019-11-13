@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import urlshortener.domain.ShortURL;
 import urlshortener.QR.GenerarQR;
+import urlshortener.ValidateURL.Validator;
 import urlshortener.domain.Click;
 import urlshortener.service.ClickService;
 import urlshortener.service.ShortURLService;
@@ -46,9 +47,11 @@ public class UrlShortenerController {
 
     @RequestMapping(value = "/link", method = RequestMethod.POST)
     public ResponseEntity<ShortURL> shortener(@RequestParam("url") String url,
-            @RequestParam(value = "sponsor", required = false) String sponsor, HttpServletRequest request) {
+            @RequestParam(value = "sponsor", required = false) String sponsor, HttpServletRequest request)
+            throws IOException {
         UrlValidator urlValidator = new UrlValidator(new String[] { "http", "https" });
-        if (urlValidator.isValid(url)) {
+        Validator v = new Validator();
+        if (urlValidator.isValid(url) && v.validate(url)) {
             ShortURL su = shortUrlService.save(url, sponsor, request.getRemoteAddr());
             HttpHeaders h = new HttpHeaders();
             h.setLocation(su.getUri());
