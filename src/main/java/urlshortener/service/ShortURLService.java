@@ -29,6 +29,12 @@ public class ShortURLService {
         return shortURLRepository.list(longitud, offset);
     }
 
+    //Funcion para borrar un elemento
+    public void delete(String hash) {
+        System.out.println("Ejecucion Borrar de ShortURLService");
+        shortURLRepository.delete(hash);
+    }
+
     public ShortURL save(String url, String sponsor, String ip) {
         ShortURL su = ShortURLBuilder.newInstance()
                 .target(url)

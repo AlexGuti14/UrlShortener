@@ -1,4 +1,4 @@
-package urlshortener.QR;
+package urlshortener.service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -9,7 +9,10 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 
-public class GenerarQR {
+import org.springframework.stereotype.Service;
+
+@Service
+public class GenerarQRService {
 
 	public byte[] getQRCodeImage(String text, int width, int height) throws WriterException, IOException {
 		try {

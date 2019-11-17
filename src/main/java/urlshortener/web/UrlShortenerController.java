@@ -6,12 +6,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import urlshortener.domain.ShortURL;
-import urlshortener.QR.GenerarQR;
-import urlshortener.ValidateURL.Validator;
 import urlshortener.domain.Click;
 import urlshortener.service.ClickService;
+import urlshortener.service.GenerarQRService;
 import urlshortener.service.ShortURLService;
-
+import urlshortener.service.ValidatorService;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -50,7 +49,7 @@ public class UrlShortenerController {
             @RequestParam(value = "sponsor", required = false) String sponsor, HttpServletRequest request)
             throws IOException {
         UrlValidator urlValidator = new UrlValidator(new String[] { "http", "https" });
-        Validator v = new Validator();
+        ValidatorService v = new ValidatorService();
         if (urlValidator.isValid(url) && v.validate(url)) {
             ShortURL su = shortUrlService.save(url, sponsor, request.getRemoteAddr());
             HttpHeaders h = new HttpHeaders();
@@ -63,31 +62,33 @@ public class UrlShortenerController {
 
     // Función para cargar CSV a base de datos
     @RequestMapping(value = "/csv", method = RequestMethod.POST)
-    public void SaveCSV(@RequestParam("linklist") List<String> linklist, @RequestParam(value = "sponsor", required = false) String sponsor, HttpServletRequest request) throws IOException {
-      System.out.println("List recieved!");
-      ShortURL su = new ShortURL();
-      HttpHeaders h = new HttpHeaders();
-      Validator v = new Validator();
-      for (int i = 0; i < linklist.size(); i++){
-        linklist.set(i, linklist.get(i).replace("\"", ""));
-        linklist.set(i, linklist.get(i).replace("[", ""));
-        linklist.set(i, linklist.get(i).replace("]", ""));
-        System.out.println(linklist.get(i));
-        UrlValidator urlValidator = new UrlValidator(new String[]{"http",
-                "https"});
-        if (urlValidator.isValid(linklist.get(i)) && v.validate(linklist.get(i))){
-            su = shortUrlService.save(linklist.get(i), sponsor, request.getRemoteAddr());
-            h.setLocation(su.getUri());
+    public void SaveCSV(@RequestParam("linklist") List<String> linklist,
+            @RequestParam(value = "sponsor", required = false) String sponsor, HttpServletRequest request)
+            throws IOException {
+        System.out.println("List recieved!");
+        ShortURL su = new ShortURL();
+        HttpHeaders h = new HttpHeaders();
+        ValidatorService v = new ValidatorService();
+        for (int i = 0; i < linklist.size(); i++) {
+            linklist.set(i, linklist.get(i).replace("\"", ""));
+            linklist.set(i, linklist.get(i).replace("[", ""));
+            linklist.set(i, linklist.get(i).replace("]", ""));
+            System.out.println(linklist.get(i));
+            UrlValidator urlValidator = new UrlValidator(new String[] { "http", "https" });
+            if (urlValidator.isValid(linklist.get(i)) && v.validate(linklist.get(i))) {
+                su = shortUrlService.save(linklist.get(i), sponsor, request.getRemoteAddr());
+                h.setLocation(su.getUri());
+            }
         }
-      }
     }
+
     // Funcion Listar
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public ResponseEntity<List<ShortURL>> listar(HttpServletRequest request) throws WriterException, IOException {
         System.out.println("Ejecucion listar de URLShortenerController");
         List<ShortURL> aDevolver = shortUrlService.list(100L, 0L);
 
-        GenerarQR qr = new GenerarQR();
+        GenerarQRService qr = new GenerarQRService();
 
         Iterator<ShortURL> nombreIterator = aDevolver.iterator();
         while(nombreIterator.hasNext()){
