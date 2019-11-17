@@ -94,12 +94,15 @@ public class UrlShortenerController {
 
         GenerarQRService qr = new GenerarQRService();
 
-        Iterator<ShortURL> nombreIterator = aDevolver.iterator();
-        while(nombreIterator.hasNext()){
-            ShortURL elemento = nombreIterator.next();
-            elemento.setClicks(clickService.clicksByHash(elemento.getHash()));
-            elemento.setQR(qr.getQRCodeImage(elemento.getHash(), 150, 150));
-        }
+        aDevolver.forEach(item->{
+            item.setClicks(clickService.clicksByHash(item.getHash()));
+            try {
+                item.setQR(qr.getQRCodeImage(item.getHash(), 150, 150));
+            } catch (WriterException | IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        });
 
         return new ResponseEntity<>(aDevolver, HttpStatus.CREATED);
     }
