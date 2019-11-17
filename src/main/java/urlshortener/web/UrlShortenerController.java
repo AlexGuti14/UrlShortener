@@ -12,6 +12,11 @@ import urlshortener.service.GenerarQRService;
 import urlshortener.service.ShortURLService;
 import urlshortener.service.ValidatorService;
 
+import java.util.concurrent.CompletableFuture;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
+
+
 import javax.servlet.http.HttpServletRequest;
 
 import com.google.zxing.WriterException;
@@ -25,7 +30,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 @RestController
 public class UrlShortenerController {
     private final ShortURLService shortUrlService;
-
+    private final ValidatorService v = new ValidatorService();
     private final ClickService clickService;
 
     public UrlShortenerController(ShortURLService shortUrlService, ClickService clickService) {
@@ -49,7 +54,7 @@ public class UrlShortenerController {
             @RequestParam(value = "sponsor", required = false) String sponsor, HttpServletRequest request)
             throws IOException {
         UrlValidator urlValidator = new UrlValidator(new String[] { "http", "https" });
-        ValidatorService v = new ValidatorService();
+        
         if (urlValidator.isValid(url) && v.validate(url)) {
             ShortURL su = shortUrlService.save(url, sponsor, request.getRemoteAddr());
             HttpHeaders h = new HttpHeaders();
@@ -68,7 +73,6 @@ public class UrlShortenerController {
         System.out.println("List recieved!");
         ShortURL su = new ShortURL();
         HttpHeaders h = new HttpHeaders();
-        ValidatorService v = new ValidatorService();
         for (int i = 0; i < linklist.size(); i++) {
             linklist.set(i, linklist.get(i).replace("\"", ""));
             linklist.set(i, linklist.get(i).replace("[", ""));
@@ -100,6 +104,19 @@ public class UrlShortenerController {
         return new ResponseEntity<>(aDevolver, HttpStatus.CREATED);
     }
 
+    // Intento de funcion validar Scheduled
+	@Async
+	@Scheduled(fixedDelay = 5000) // Function will be executed X time after the last one finishes
+	public void VerificacionPeriodica() throws IOException {
+
+		List<ShortURL> aDevolver = shortUrlService.list(100L, 0L);
+		for (ShortURL elemento: aDevolver){
+			// Check if the URI is reachable, delete from database if not.
+			if(!v.validate(elemento.getUri().toString())){
+				shortUrlService.delete(elemento.getHash());
+			}
+        }
+	}
 
     private String extractIP(HttpServletRequest request) {
         return request.getRemoteAddr();
