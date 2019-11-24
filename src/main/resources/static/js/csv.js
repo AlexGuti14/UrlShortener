@@ -1,25 +1,21 @@
 $(document).ready(function (){
   $(".error").hide();
   $(viewCSV).click(function(){
-    console.log();
     var rd = new FileReader();
     rd.onload = function (e) {
 
       var rows = e.target.result.split("\n");
       var filteredList = [];
-
       for (var i = 0; i < rows.length; i++){
         if(rows[i] != ""){
+          rows[i] = rows[i].replace(',', '')
           filteredList.push(rows[i]);
         }
       }
-
-      var linklistJSON = JSON.stringify(filteredList);
         $.ajax({
             type: "POST",
             url: "/csv",
-            dataType: 'json',
-            data: {'linklist': linklistJSON},
+            data: {'linklist':filteredList},
             success: function (msg) {
             },
             error: function () {
