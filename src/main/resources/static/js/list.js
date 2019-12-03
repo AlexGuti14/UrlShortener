@@ -14,7 +14,6 @@ $(document).ready(
                         tabla += "</td><td>";
                         tabla +=  respuesta[i].clicks;
                         tabla += "</td><td>";
-                        //tabla += "<input type='button' onclick='generarQr(" + respuesta[i].hash + ")'>GenerarQR</input>";
                         tabla += "<input type='button' onclick='generarQr(\"" + respuesta[i].hash + "\")'>GenerarQR</input>";
                         //tabla +=  "<img src='data:image/jpg;base64, " + respuesta[i].qr + "'>";
                         tabla += "</td></tr>";
@@ -35,16 +34,22 @@ function generarQr(hash) {
     console.log(hash);
     $.ajax({
         type: "GET",
-        url: "/qr?",
+        url: "/qr",
         data: { "hash" : hash },
         success: function (respuesta) {
-            console.log("Funcion finalizada con exito");
-            $("#qr").html("<img src='data:image/jpg;base64, " + respuesta + "'></img>");
+            console.log("QR al pulsar " + respuesta.qr);
+
+            //Open a new window with QR code
+            var image = new Image();
+            image.src = "data:image/jpg;base64," + respuesta.qr;
+            var w = window.open('about:blank', 'popup', 'width=250px,height=250px');
+            w.document.write(image.outerHTML);
+
+            //$("#qr").html("<img src='data:image/jpg;base64, " + respuesta.qr + "'>");
         },
         error: function () {
-            console.log("Fracaso absoluto");
             $("#qr").html(
-                "<tr><th>ERROR</th></tr>");
+                "<tr><th>QR not generated</th></tr>");
         }
     })
 }

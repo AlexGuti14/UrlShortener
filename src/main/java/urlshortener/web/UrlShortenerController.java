@@ -86,21 +86,28 @@ public class UrlShortenerController {
     // Funcion Listar
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public ResponseEntity<List<ShortURL>> listar(HttpServletRequest request) throws WriterException, IOException {
-        System.out.println("Ejecucion listar de URLShortenerController");
+        
         List<ShortURL> aDevolver = shortUrlService.list(100L, 0L);
 
+        //Guarda los click de cada URL
         aDevolver.forEach(item->{
             item.setClicks(clickService.clicksByHash(item.getHash()));
-            try {
-                item.setQR(qr.getQRCodeImage(item.getUri().toString(), 150, 150));
-            } catch (WriterException | IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
         });
 
         return new ResponseEntity<>(aDevolver, HttpStatus.CREATED);
     }
+
+
+
+    @RequestMapping(value = "/qr", method = RequestMethod.GET)
+    public ResponseEntity<ShortURL> crearQr (@RequestParam("hash") String hash) throws IOException, WriterException {
+        System.out.println("Hash para cread el qr: " + hash);
+        ShortURL s = new ShortURL();
+        s.setQR(qr.getQRCodeImage(hash, 150, 150));
+        return new ResponseEntity<>(s, HttpStatus.CREATED);
+    }
+    
+
 
     // TODO: Lanza NullPointerException sin parar pero cuando tiene que hacer la comprobacion la hace bien¡
     // TODO: A la hora de cachear mirar qeu la cache este a la par con la base de datos, así como intentar ponerle un tiempo
@@ -118,12 +125,6 @@ public class UrlShortenerController {
             }
         }
 	}
-
-    @RequestMapping(value = "/qr", method = RequestMethod.GET)
-    public ResponseEntity<byte[]> crearQr (@RequestParam("hash") String hash) throws IOException, WriterException {
-        System.out.println("Hash para cread el qr: " + hash);
-        return new ResponseEntity<>(qr.getQRCodeImage(hash, 150, 150), HttpStatus.CREATED);
-    }
 
     private String extractIP(HttpServletRequest request) {
         return request.getRemoteAddr();
