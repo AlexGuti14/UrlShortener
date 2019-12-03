@@ -72,12 +72,12 @@ public class UrlShortenerController {
             throws IOException {
         ShortURL su = new ShortURL();
         HttpHeaders h = new HttpHeaders();
-         for (int i = 0; i < linklist.length; i++) {
-             UrlValidator urlValidator = new UrlValidator(new String[] { "http", "https" });
-             if (urlValidator.isValid(linklist[i]) && v.validate(linklist[i])) {
-                 su = shortUrlService.save(linklist[i], sponsor, request.getRemoteAddr());
-             }
-         }
+        for (int i = 0; i < linklist.length; i++) {
+            UrlValidator urlValidator = new UrlValidator(new String[] { "http", "https" });
+            if (urlValidator.isValid(linklist[i]) && v.validate(linklist[i])) {
+                su = shortUrlService.save(linklist[i], sponsor, request.getRemoteAddr());
+            }
+        }
     }
 
     // Funcion Listar
@@ -91,7 +91,7 @@ public class UrlShortenerController {
         aDevolver.forEach(item->{
             item.setClicks(clickService.clicksByHash(item.getHash()));
             try {
-                item.setQR(qr.getQRCodeImage(item.getHash(), 150, 150));
+                item.setQR(qr.getQRCodeImage(item.getUri().toString(), 150, 150));
             } catch (WriterException | IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();

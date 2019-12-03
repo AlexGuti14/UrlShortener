@@ -10,6 +10,7 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 
 import org.springframework.stereotype.Service;
+import urlshortener.exceptions.*;
 
 @Service
 public class GenerarQRService {
@@ -22,7 +23,7 @@ public class GenerarQRService {
 			MatrixToImageWriter.writeToStream(bitMatrix, "png", byteArrayOutputStream);
 			return byteArrayOutputStream.toByteArray();
 		} catch (Exception e) {
-			return null;
+			throw new QRNotGeneratedException("QR not generated");
 		}
 	}
 

@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import urlshortener.service.ShortURLService;
 import urlshortener.domain.ShortURL;
+import urlshortener.exceptions.ConectionRefusedException;
 import urlshortener.repository.ShortURLRepository;
 
 @Service
@@ -29,7 +30,9 @@ public class ValidatorService {
 			// GESTIONAR DEMAS CODIGOS DE RESPUESTA
             System.out.println(code);
 		} catch (Exception e) {
-            System.out.println("Conection refused");
+			System.out.println("Conection refused");
+			throw new ConectionRefusedException("ERROR, URI is unreachable");
+			
         }
 		return result;
 	}
