@@ -1,6 +1,8 @@
 package urlshortener.web;
 
 import org.apache.commons.validator.routines.UrlValidator;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +33,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 public class UrlShortenerController {
     private final ShortURLService shortUrlService;
     private final ValidatorService v = new ValidatorService();
+    private final GenerarQRService qr = new GenerarQRService();
     private final ClickService clickService;
 
     public UrlShortenerController(ShortURLService shortUrlService, ClickService clickService) {
@@ -86,8 +89,6 @@ public class UrlShortenerController {
         System.out.println("Ejecucion listar de URLShortenerController");
         List<ShortURL> aDevolver = shortUrlService.list(100L, 0L);
 
-        GenerarQRService qr = new GenerarQRService();
-
         aDevolver.forEach(item->{
             item.setClicks(clickService.clicksByHash(item.getHash()));
             try {
@@ -101,19 +102,28 @@ public class UrlShortenerController {
         return new ResponseEntity<>(aDevolver, HttpStatus.CREATED);
     }
 
-    // Intento de funcion validar Scheduled
-	@Async
-	@Scheduled(fixedDelay = 5000) // Function will be executed X time after the last one finishes
+    // TODO: Lanza NullPointerException sin parar pero cuando tiene que hacer la comprobacion la hace bien¡
+    // TODO: A la hora de cachear mirar qeu la cache este a la par con la base de datos, así como intentar ponerle un tiempo
+    // maximo de expiracion a los datos o una politica de expiraion
+    @Scheduled(fixedDelay = 50000 ) // Function will be executed X time after the last one finishes
+    //@CacheEvict(¿key = (elemento.getUri().toString()??)
 	public void VerificacionPeriodica() throws IOException {
-
-		List<ShortURL> aDevolver = shortUrlService.list(100L, 0L);
-		for (ShortURL elemento: aDevolver){
-			// Check if the URI is reachable, delete from database if not.
-			if(!v.validate(elemento.getUri().toString())){
-				shortUrlService.delete(elemento.getHash());
-			}
+        List<ShortURL> aDevolver = shortUrlService.list(100L, 0L);
+        if (!aDevolver.isEmpty()){
+            for (ShortURL elemento: aDevolver){
+                // Check if the URI is reachable, delete from database if not.
+                if(!v.validate(elemento.getUri().toString())){
+                    shortUrlService.delete(elemento.getHash());
+                }
+            }
         }
 	}
+
+    @RequestMapping(value = "/qr", method = RequestMethod.GET)
+    public ResponseEntity<byte[]> crearQr (@RequestParam("hash") String hash) throws IOException, WriterException {
+        System.out.println("Hash para cread el qr: " + hash);
+        return new ResponseEntity<>(qr.getQRCodeImage(hash, 150, 150), HttpStatus.CREATED);
+    }
 
     private String extractIP(HttpServletRequest request) {
         return request.getRemoteAddr();
