@@ -18,13 +18,17 @@ import java.util.concurrent.CompletableFuture;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 
-
 import javax.servlet.http.HttpServletRequest;
 
 import com.google.zxing.WriterException;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.UnknownHostException;
 import java.util.*;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
@@ -57,7 +61,7 @@ public class UrlShortenerController {
             @RequestParam(value = "sponsor", required = false) String sponsor, HttpServletRequest request)
             throws IOException {
         UrlValidator urlValidator = new UrlValidator(new String[] { "http", "https" });
-        
+
         if (urlValidator.isValid(url) && v.validate(url)) {
             ShortURL su = shortUrlService.save(url, sponsor, request.getRemoteAddr());
             HttpHeaders h = new HttpHeaders();
@@ -86,27 +90,26 @@ public class UrlShortenerController {
     // Funcion Listar
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public ResponseEntity<List<ShortURL>> listar(HttpServletRequest request) throws WriterException, IOException {
-        
+
         List<ShortURL> aDevolver = shortUrlService.list(100L, 0L);
 
-        //Guarda los click de cada URL
-        aDevolver.forEach(item->{
+        // Guarda los click de cada URL
+        aDevolver.forEach(item -> {
             item.setClicks(clickService.clicksByHash(item.getHash()));
         });
 
         return new ResponseEntity<>(aDevolver, HttpStatus.CREATED);
     }
 
-
-
     @RequestMapping(value = "/qr", method = RequestMethod.GET)
-    public ResponseEntity<ShortURL> crearQr (@RequestParam("hash") String hash) throws IOException, WriterException {
+    public ResponseEntity<ShortURL> crearQr(@RequestParam("hash") String hash, HttpServletRequest request)
+            throws IOException, WriterException, URISyntaxException {
         System.out.println("Hash para cread el qr: " + hash);
         ShortURL s = new ShortURL();
-        s.setQR(qr.getQRCodeImage(hash, 150, 150));
+        s.setQR(qr.getQRCodeImage("http://" + obtenerIP() + ":8080/" + hash, 150, 150));
+        System.out.println(obtenerIP());
         return new ResponseEntity<>(s, HttpStatus.CREATED);
     }
-    
 
 
     // TODO: Lanza NullPointerException sin parar pero cuando tiene que hacer la comprobacion la hace bien¡
@@ -119,7 +122,7 @@ public class UrlShortenerController {
         if (!aDevolver.isEmpty()){
             for (ShortURL elemento: aDevolver){
                 // Check if the URI is reachable, delete from database if not.
-                if(!v.validate(elemento.getUri().toString())){
+                if(!v.validate(elemento.getTarget())){
                     shortUrlService.delete(elemento.getHash());
                 }
             }
@@ -128,6 +131,27 @@ public class UrlShortenerController {
 
     private String extractIP(HttpServletRequest request) {
         return request.getRemoteAddr();
+    }
+
+    String obtenerIP() throws UnknownHostException {
+        try {
+            for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en
+                    .hasMoreElements();) {
+                NetworkInterface intf = en.nextElement();
+                if (intf.getName().contains("wlan")) {
+                    for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr
+                            .hasMoreElements();) {
+                        InetAddress inetAddress = enumIpAddr.nextElement();
+                        if (!inetAddress.isLoopbackAddress()
+                                && (inetAddress.getAddress().length == 4)) {
+                            return inetAddress.getHostAddress();
+                        }
+                    }
+                }
+            }
+        } catch (SocketException ex) {
+        }
+        return null;
     }
 
     private ResponseEntity<?> createSuccessfulRedirectToResponse(ShortURL l) {
