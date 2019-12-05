@@ -43,6 +43,7 @@ public class UrlShortenerController {
     public UrlShortenerController(ShortURLService shortUrlService, ClickService clickService) {
         this.shortUrlService = shortUrlService;
         this.clickService = clickService;
+        
     }
 
     @RequestMapping(value = "/{id:(?!link|index).*}", method = RequestMethod.GET)
