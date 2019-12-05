@@ -44,12 +44,11 @@ function generarQr(hash) {
             image.src = "data:image/jpg;base64," + respuesta.qr;
             var w = window.open('about:blank', 'popup', 'width=250px,height=250px');
             w.document.write(image.outerHTML);
-
             //$("#qr").html("<img src='data:image/jpg;base64, " + respuesta.qr + "'>");
         },
         error: function () {
-            $("#qr").html(
-                "<tr><th>QR not generated</th></tr>");
+            var w = window.open('about:blank', 'popup', 'width=250px,height=250px');
+            w.document.write("Problem to generate QR");
         }
     })
 }
