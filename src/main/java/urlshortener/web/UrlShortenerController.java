@@ -112,7 +112,7 @@ public class UrlShortenerController {
         return new ResponseEntity<>(s, HttpStatus.CREATED);
     }
 
-
+    /*
     // TODO: Lanza NullPointerException sin parar pero cuando tiene que hacer la comprobacion la hace bien¡
     // TODO: A la hora de cachear mirar qeu la cache este a la par con la base de datos, así como intentar ponerle un tiempo
     // maximo de expiracion a los datos o una politica de expiraion
@@ -128,7 +128,7 @@ public class UrlShortenerController {
                 }
             }
         }
-	}
+	}*/
 
     private String extractIP(HttpServletRequest request) {
         return request.getRemoteAddr();
