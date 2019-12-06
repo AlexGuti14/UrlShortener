@@ -36,14 +36,15 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 @RestController
 public class UrlShortenerController {
     private final ShortURLService shortUrlService;
-    private final ValidatorService v = new ValidatorService();
+    private final ValidatorService validatorService;
     private final GenerarQRService qr = new GenerarQRService();
     private final ClickService clickService;
 
-    public UrlShortenerController(ShortURLService shortUrlService, ClickService clickService) {
+    public UrlShortenerController(ShortURLService shortUrlService, ClickService clickService, ValidatorService validatorService) {
         this.shortUrlService = shortUrlService;
         this.clickService = clickService;
-        
+        this.validatorService = validatorService;
+
     }
 
     @RequestMapping(value = "/{id:(?!link|index).*}", method = RequestMethod.GET)
@@ -63,7 +64,7 @@ public class UrlShortenerController {
             throws IOException {
         UrlValidator urlValidator = new UrlValidator(new String[] { "http", "https" });
 
-        if (urlValidator.isValid(url) && v.validate(url)) {
+        if (urlValidator.isValid(url) && validatorService.validate(url) == "Constructable") {
             ShortURL su = shortUrlService.save(url, sponsor, request.getRemoteAddr());
             HttpHeaders h = new HttpHeaders();
             h.setLocation(su.getUri());
@@ -82,7 +83,7 @@ public class UrlShortenerController {
         HttpHeaders h = new HttpHeaders();
         for (int i = 0; i < linklist.length; i++) {
             UrlValidator urlValidator = new UrlValidator(new String[] { "http", "https" });
-            if (urlValidator.isValid(linklist[i]) && v.validate(linklist[i])) {
+            if (urlValidator.isValid(linklist[i]) && validatorService.validate(linklist[i]) == "Constructable") {
                 su = shortUrlService.save(linklist[i], sponsor, request.getRemoteAddr());
             }
         }
@@ -123,7 +124,7 @@ public class UrlShortenerController {
         if (!aDevolver.isEmpty()){
             for (ShortURL elemento: aDevolver){
                 // Check if the URI is reachable, delete from database if not.
-                if(!v.validate(elemento.getTarget())){
+                if(!validatorService.validate(elemento.getTarget())){
                     shortUrlService.delete(elemento.getHash());
                 }
             }
