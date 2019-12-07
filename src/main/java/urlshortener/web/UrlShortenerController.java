@@ -17,6 +17,8 @@ import urlshortener.service.ValidatorService;
 import java.util.concurrent.CompletableFuture;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -76,17 +78,20 @@ public class UrlShortenerController {
 
     // Función para cargar CSV a base de datos
     @RequestMapping(value = "/csv", method = RequestMethod.POST)
-    public void SaveCSV(@RequestParam("linklist[]") String[] linklist,
+    @ResponseBody
+    public List<ShortURL> SaveCSV(@RequestParam("linklist[]") String[] linklist,
             @RequestParam(value = "sponsor", required = false) String sponsor, HttpServletRequest request)
             throws IOException {
         ShortURL su = new ShortURL();
-        HttpHeaders h = new HttpHeaders();
+        List<ShortURL> shortenedList = new ArrayList<ShortURL>();
         for (int i = 0; i < linklist.length; i++) {
             UrlValidator urlValidator = new UrlValidator(new String[] { "http", "https" });
             if (urlValidator.isValid(linklist[i]) && validatorService.validate(linklist[i]) == "Constructable") {
                 su = shortUrlService.save(linklist[i], sponsor, request.getRemoteAddr());
+                shortenedList.add(su);
             }
         }
+        return shortenedList;
     }
 
     // Funcion Listar

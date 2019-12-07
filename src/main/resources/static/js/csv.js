@@ -17,8 +17,10 @@ $(document).ready(function (){
             url: "/csv",
             data: {'linklist':filteredList},
             success: function (msg) {
+
             },
             error: function () {
+              
             }
         });
     }
