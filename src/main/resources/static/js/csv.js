@@ -1,5 +1,4 @@
 $(document).ready(function (){
-  $(".error").hide();
   $(viewCSV).click(function(){
     var rd = new FileReader();
     rd.onload = function (e) {
@@ -20,17 +19,21 @@ $(document).ready(function (){
 
             },
             error: function () {
-              
+
             }
         });
     }
     var CSVfiledata = $("#inputCSV")[0].files[0];
-    if(CSVfiledata.name.includes(".csv")){
-      rd.readAsText($("#inputCSV")[0].files[0]);
-      $(".error").hide();
+    if(CSVfiledata != null){
+      if(CSVfiledata.name.includes(".csv")){
+        rd.readAsText($("#inputCSV")[0].files[0]);
+      }else{
+        alert("The selected file wasn't a .CSV file.");
+      }
     }else{
-      $(".error").show();
+      alert("Please select a file to load");
     }
+
 
   });
 });
