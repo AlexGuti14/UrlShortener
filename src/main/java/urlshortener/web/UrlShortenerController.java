@@ -1,22 +1,17 @@
 package urlshortener.web;
 
 import org.apache.commons.validator.routines.UrlValidator;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import urlshortener.domain.ShortURL;
-import urlshortener.domain.Click;
+
 import urlshortener.service.ClickService;
 import urlshortener.service.GenerarQRService;
 import urlshortener.service.ShortURLService;
 import urlshortener.service.ValidatorService;
 
-import java.util.concurrent.CompletableFuture;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 
@@ -39,14 +34,14 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 public class UrlShortenerController {
     private final ShortURLService shortUrlService;
     private final ValidatorService validatorService;
-    private final GenerarQRService qr = new GenerarQRService();
+    private final GenerarQRService qr;
     private final ClickService clickService;
 
-    public UrlShortenerController(ShortURLService shortUrlService, ClickService clickService, ValidatorService validatorService) {
+    public UrlShortenerController(ShortURLService shortUrlService, ClickService clickService, ValidatorService validatorService, GenerarQRService qr) {
         this.shortUrlService = shortUrlService;
         this.clickService = clickService;
         this.validatorService = validatorService;
-
+        this.qr = qr;
     }
 
     @RequestMapping(value = "/{id:(?!link|index).*}", method = RequestMethod.GET)

@@ -3,14 +3,10 @@ package urlshortener.service;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.List;
 import java.util.HashMap;
 
 import org.springframework.stereotype.Service;
-import urlshortener.service.ShortURLService;
-import urlshortener.domain.ShortURL;
 import urlshortener.exceptions.ConectionRefusedException;
-import urlshortener.repository.ShortURLRepository;
 
 @Service
 public class ValidatorService {
