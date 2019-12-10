@@ -109,7 +109,8 @@ public class UrlShortenerController {
             throws IOException, WriterException, URISyntaxException {
         System.out.println("Hash para cread el qr: " + hash);
         ShortURL s = new ShortURL();
-        s.setQR(qr.getQRCodeImage("http://" + obtenerIP() + ":8080/" + hash, 150, 150));
+        //s.setQR(qr.getQRCodeImage("http://" + obtenerIP() + ":8080/" + hash, 150, 150));
+        s.setQR(qr.getQRCodeImage(hash, 150, 150));
         System.out.println(obtenerIP());
         return new ResponseEntity<>(s, HttpStatus.CREATED);
     }

@@ -14,7 +14,7 @@ $(document).ready(
                         tabla += "</td><td>";
                         tabla +=  respuesta[i].clicks;
                         tabla += "</td><td>";
-                        tabla += "<input type='button' onclick='generarQr(\"" + respuesta[i].hash + "\")'>GenerarQR</input>";
+                        tabla += "<input type='button' onclick='generarQr(\"" + respuesta[i].target + "\")'>GenerarQR</input>";
                         //tabla +=  "<img src='data:image/jpg;base64, " + respuesta[i].qr + "'>";
                         tabla += "</td></tr>";
                     }
