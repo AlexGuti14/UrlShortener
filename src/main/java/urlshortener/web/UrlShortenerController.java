@@ -4,6 +4,7 @@ import org.apache.commons.validator.routines.UrlValidator;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 import urlshortener.domain.ShortURL;
 
@@ -113,7 +114,7 @@ public class UrlShortenerController {
         return new ResponseEntity<>(s, HttpStatus.CREATED);
     }
 
-    /*
+    
     // TODO: Lanza NullPointerException sin parar pero cuando tiene que hacer la comprobacion la hace bien¡
     // TODO: A la hora de cachear mirar qeu la cache este a la par con la base de datos, así como intentar ponerle un tiempo
     // maximo de expiracion a los datos o una politica de expiraion
@@ -124,12 +125,12 @@ public class UrlShortenerController {
         if (!aDevolver.isEmpty()){
             for (ShortURL elemento: aDevolver){
                 // Check if the URI is reachable, delete from database if not.
-                if(!validatorService.validate(elemento.getTarget())){
+                if(validatorService.validate(elemento.getTarget()) != "Constructable"){
                     shortUrlService.delete(elemento.getHash());
                 }
             }
         }
-	}*/
+	}
 
     private String extractIP(HttpServletRequest request) {
         return request.getRemoteAddr();
