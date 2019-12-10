@@ -43,6 +43,8 @@ dependencies {
 
     // https://mvnrepository.com/artifact/io.hawt/hawtio-springboot
     compile group: 'io.hawt', name: 'hawtio-springboot', version: '2.8.0'
+    // Dependency for latest ehcache's version
+    compile group: 'org.ehcache', name: 'ehcache', version: '3.1.3'
     
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

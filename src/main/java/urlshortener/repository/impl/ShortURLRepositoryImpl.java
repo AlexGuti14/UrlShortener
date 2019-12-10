@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.DirectFieldAccessor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -15,6 +17,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Repository
+@EnableCaching
 public class ShortURLRepositoryImpl implements ShortURLRepository {
 
     private static final Logger log = LoggerFactory
@@ -89,6 +92,7 @@ public class ShortURLRepositoryImpl implements ShortURLRepository {
     }
 
     @Override
+    @CacheEvict(value = "qrs", key = "#hash")
     public void delete(String hash) {
         try {
             jdbc.update("delete from shorturl where hash=?", hash);
