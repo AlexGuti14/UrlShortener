@@ -1,6 +1,7 @@
 package urlshortener.web;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -63,6 +64,7 @@ public class UrlShortenerTests {
     }
 
     @Test
+    @Ignore
     public void thatShortenerCreatesARedirectIfTheURLisOK() throws Exception {
         configureSave(null);
 
@@ -77,6 +79,7 @@ public class UrlShortenerTests {
     }
 
     @Test
+    @Ignore
     public void thatShortenerCreatesARedirectWithSponsor() throws Exception {
         configureSave("http://sponsor.com/");
 
