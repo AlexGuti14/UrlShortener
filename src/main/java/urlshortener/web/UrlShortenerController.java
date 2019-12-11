@@ -74,8 +74,7 @@ public class UrlShortenerController {
 
     // Función para cargar CSV a base de datos
     @RequestMapping(value = "/csv", method = RequestMethod.POST)
-    @ResponseBody
-    public List<ShortURL> SaveCSV(@RequestParam("linklist[]") String[] linklist,
+    public ResponseEntity<List<ShortURL>> SaveCSV(@RequestParam("linklist[]") String[] linklist,
             @RequestParam(value = "sponsor", required = false) String sponsor, HttpServletRequest request)
             throws IOException {
         ShortURL su = new ShortURL();
@@ -87,7 +86,7 @@ public class UrlShortenerController {
                 shortenedList.add(su);
             }
         }
-        return shortenedList;
+        return new ResponseEntity<>(shortenedList, HttpStatus.CREATED);
     }
 
     // Funcion Listar
@@ -115,7 +114,7 @@ public class UrlShortenerController {
         return new ResponseEntity<>(s, HttpStatus.CREATED);
     }
 
-    
+
     // TODO: Lanza NullPointerException sin parar pero cuando tiene que hacer la comprobacion la hace bien¡
     // TODO: A la hora de cachear mirar qeu la cache este a la par con la base de datos, así como intentar ponerle un tiempo
     // maximo de expiracion a los datos o una politica de expiraion

@@ -39,8 +39,7 @@ public class ValidatorService {
           result = HTTPcodes.get(code);
         }
   		} catch (IOException e) {
-            throw new ConectionRefusedException("404: Not Found");
-
+            return "404: Not Found";
           }
   		return result;
   	}

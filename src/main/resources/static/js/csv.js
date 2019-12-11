@@ -15,11 +15,17 @@ $(document).ready(function (){
             type: "POST",
             url: "/csv",
             data: {'linklist':filteredList},
-            success: function (msg) {
-
+            success: function (generatedList) {
+              for (var i = 0; i < generatedList.length; i++){
+                if(filteredList.includes(generatedList[i].target)){
+                  filteredList.splice(filteredList.indexOf(generatedList[i].target), 1 );
+                }
+              }
+              alert(filteredList.length + "URLs were not created:");
+              console.log(filteredList);
             },
             error: function () {
-
+              console.log("Something happened D:");
             }
         });
     }
