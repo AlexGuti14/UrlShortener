@@ -115,18 +115,19 @@ public class UrlShortenerController {
     }
 
 
-    // TODO: Lanza NullPointerException sin parar pero cuando tiene que hacer la comprobacion la hace bien¡
-    // TODO: A la hora de cachear mirar qeu la cache este a la par con la base de datos, así como intentar ponerle un tiempo
-    // maximo de expiracion a los datos o una politica de expiraion
+    // TODO: verificar solo unas pocas que no se hayan verificado recientemente. 
     @Scheduled(fixedDelay = 50000 ) // Function will be executed X time after the last one finishes
     //@CacheEvict(¿key = (elemento.getUri().toString()??)
 	public void VerificacionPeriodica() throws IOException {
         List<ShortURL> aDevolver = shortUrlService.list(100L, 0L);
         if (!aDevolver.isEmpty()){
             for (ShortURL elemento: aDevolver){
-                // Check if the URI is reachable, delete from database if not.
+                // Check if the URI is reachable, delete from database if not. If it is reachable the ehcache is updated.
                 if(validatorService.validate(elemento.getTarget()) != "Constructable"){
                     shortUrlService.delete(elemento.getHash());
+                }
+                else {
+                    validatorService.updateCache(elemento.getHash());
                 }
             }
         }

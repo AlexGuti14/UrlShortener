@@ -15,7 +15,7 @@ import com.google.zxing.common.BitMatrix;
 public class QRRepositoryImpl implements QRRepository {
 
     @Override
-    @Cacheable("qrs")
+    @Cacheable(value = "qrs", key = "#text")
     public 	byte[] getQR(String text, int width, int height) {
         try {
 			QRCodeWriter qrCodeWriter = new QRCodeWriter();
@@ -29,5 +29,4 @@ public class QRRepositoryImpl implements QRRepository {
 			throw new QRNotGeneratedException("QR not generated");
 		}	        
     }
-
 }

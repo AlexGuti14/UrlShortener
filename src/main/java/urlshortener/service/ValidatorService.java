@@ -5,6 +5,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
 
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.stereotype.Service;
 import urlshortener.exceptions.ConectionRefusedException;
 
@@ -42,5 +43,8 @@ public class ValidatorService {
             return "404: Not Found";
           }
   		return result;
-  	}
+    }
+    
+    @CachePut(value = "qrs", key = "#hash")
+    public void updateCache(String hash){}
 }
