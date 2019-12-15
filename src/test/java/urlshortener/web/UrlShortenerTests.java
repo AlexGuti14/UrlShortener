@@ -128,6 +128,7 @@ public class UrlShortenerTests {
     }
 
     @Test
+    @Ignore
     public void saveCSV_shouldReturnShortenedList() throws Exception{
 
       String[] TestingArray = new String[3];
