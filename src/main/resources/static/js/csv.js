@@ -16,13 +16,15 @@ $(document).ready(function (){
             url: "/csv",
             data: {'linklist':filteredList},
             success: function (generatedList) {
+              var saveURL="";
               for (var i = 0; i < generatedList.length; i++){
                 if(filteredList.includes(generatedList[i].target)){
                   filteredList.splice(filteredList.indexOf(generatedList[i].target), 1 );
+                  saveURL += generatedList[i].target + "<br/>";
                 }
               }
-              alert(filteredList.length + "URLs were not created:");
-              console.log(filteredList);
+              var w = window.open('about:blank', 'popup', 'width=450px,height=450px');
+              w.document.write("Created URLs: <br/>" + saveURL);
             },
             error: function () {
               console.log("Something happened D:");

@@ -4,7 +4,7 @@ $(document).ready(
             $.ajax({
                 type: "GET",
                 url: "/list",
-                success: function (respuesta, res2) {
+                success: function (respuesta) {
                     var tabla = "<table id='result' align='center' border='1' WIDTH='1000' HEIGHT='100'> <tr><th>SHORTENER URL</th><th>ORIGINAL URL</th> <th>Clicks</th> <th>QR code</th></tr>";
                     for (var i=0; i<respuesta.length;i++){
                         tabla += "<tr><td>";
@@ -14,8 +14,7 @@ $(document).ready(
                         tabla += "</td><td>";
                         tabla +=  respuesta[i].clicks;
                         tabla += "</td><td>";
-                        tabla += "<input type='button' onclick='generarQr(\"" + respuesta[i].hash + "\")'>GenerarQR</input>";
-                        //tabla +=  "<img src='data:image/jpg;base64, " + respuesta[i].qr + "'>";
+                        tabla += "<input type='button' onclick='generarQr(\"" + respuesta[i].hash + "\")'>Generate QR</input>";
                         tabla += "</td></tr>";
                     }
                     tabla += "</table>"
