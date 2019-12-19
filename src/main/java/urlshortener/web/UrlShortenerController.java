@@ -62,7 +62,7 @@ public class UrlShortenerController {
             @RequestParam(value = "sponsor", required = false) String sponsor, HttpServletRequest request)
             throws IOException {
         UrlValidator urlValidator = new UrlValidator(new String[] { "http", "https" });
-
+        
         if (urlValidator.isValid(url) && validatorService.validate(url) == "Constructable") {
             ShortURL su = shortUrlService.save(url, sponsor, request.getRemoteAddr());
             HttpHeaders h = new HttpHeaders();
@@ -83,7 +83,6 @@ public class UrlShortenerController {
             throws IOException {
         ShortURL su = new ShortURL();
         List<ShortURL> shortenedList = new ArrayList<ShortURL>();
-
         for (int i = 0; i < linklist.length; i++) {
             UrlValidator urlValidator = new UrlValidator(new String[] { "http", "https" });
             if (urlValidator.isValid(linklist[i]) && validatorService.validate(linklist[i]) == "Constructable") {

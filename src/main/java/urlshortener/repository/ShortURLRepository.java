@@ -16,10 +16,14 @@ public interface ShortURLRepository {
 
     void update(ShortURL su);
 
+    void updateValidation(ShortURL su);
+
     void delete(String id);
 
     Long count();
 
     List<ShortURL> list(Long limit, Long offset);
+
+    List<ShortURL> listByValidation(Long limit, Long offset);
 
 }

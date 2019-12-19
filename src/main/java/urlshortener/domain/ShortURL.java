@@ -2,6 +2,7 @@ package urlshortener.domain;
 
 import java.net.URI;
 import java.sql.Date;
+import java.sql.Timestamp;
 
 public class ShortURL {
 
@@ -17,10 +18,11 @@ public class ShortURL {
     private String country;
     private Long clicks;
     private byte[] qr;
+    private Timestamp validation;
 
     public ShortURL(String hash, String target, URI uri, String sponsor,
                     Date created, String owner, Integer mode, Boolean safe, String ip,
-                    String country) {
+                    String country, Timestamp validation) {
         this.hash = hash;
         this.target = target;
         this.uri = uri;
@@ -32,6 +34,7 @@ public class ShortURL {
         this.ip = ip;
         this.country = country;
         this.clicks = 0L;
+        this.validation = validation;
     }
 
     public ShortURL() {
@@ -91,5 +94,13 @@ public class ShortURL {
 
     public void setQR(byte[] qr) {
         this.qr = qr;
+    }
+
+    public Timestamp getTimestamp(){
+        return validation;
+    }
+
+    public void setTimestamp(Timestamp val) {
+        this.validation = val;
     }
 }

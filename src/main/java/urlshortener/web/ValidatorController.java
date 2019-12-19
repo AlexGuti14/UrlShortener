@@ -27,7 +27,7 @@ public class ValidatorController {
      */ 
     @Scheduled(fixedDelay = 50000 ) // Function will be executed X time after the last one finishes
 	public void VerificacionPeriodica() throws IOException {
-        List<ShortURL> aDevolver = shortUrlService.list(100L, 0L);
+        List<ShortURL> aDevolver = shortUrlService.listByValidation(10L, 0L);
         if (!aDevolver.isEmpty()){
             for (ShortURL elemento: aDevolver){
                 // Check if the URI is reachable, delete from database if not. If it is reachable the ehcache is updated.
@@ -35,6 +35,8 @@ public class ValidatorController {
                     shortUrlService.delete(elemento.getHash());
                 }
                 else {
+                    //Update new timestamp
+                    shortUrlService.updateValidation(elemento);
                     validatorService.updateCache(elemento.getHash());
                 }
             }

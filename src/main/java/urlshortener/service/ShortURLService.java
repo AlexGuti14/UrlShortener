@@ -23,10 +23,16 @@ public class ShortURLService {
         return shortURLRepository.findByKey(id);
     }
 
-    // FUncion para listar
+    // Funcion para listar
     public List<ShortURL> list(Long longitud, Long offset) {
         System.out.println("Ejecucion listar de ShortURLService");
         return shortURLRepository.list(longitud, offset);
+    }
+
+    // FUncion para listar por orden de validacion antigua
+    public List<ShortURL> listByValidation(Long longitud, Long offset) {
+        System.out.println("Ejecucion listar por validacion de ShortURLService");
+        return shortURLRepository.listByValidation(longitud, offset);
     }
 
     //Funcion para borrar un elemento
@@ -46,7 +52,14 @@ public class ShortURLService {
                 .treatAsSafe()
                 .ip(ip)
                 .unknownCountry()
+                .validationNow()
                 .build();
         return shortURLRepository.save(su);
+    }
+
+    //Funcion para borrar un elemento
+    public void updateValidation(ShortURL su) {
+        System.out.println("Ejecucion actualizar de ShortURLService");
+        shortURLRepository.updateValidation(su);;
     }
 }

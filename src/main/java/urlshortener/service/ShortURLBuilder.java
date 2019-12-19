@@ -7,6 +7,7 @@ import urlshortener.domain.ShortURL;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.UUID;
 import java.util.function.Function;
 
@@ -22,6 +23,7 @@ public class ShortURLBuilder {
     private Boolean safe;
     private String ip;
     private String country;
+    private Timestamp validation;
 
     static ShortURLBuilder newInstance() {
         return new ShortURLBuilder();
@@ -38,7 +40,8 @@ public class ShortURLBuilder {
                 mode,
                 safe,
                 ip,
-                country
+                country,
+                validation
         );
     }
 
@@ -85,6 +88,11 @@ public class ShortURLBuilder {
 
     ShortURLBuilder uri(Function<String, URI> extractor) {
         this.uri = extractor.apply(hash);
+        return this;
+    }
+
+    ShortURLBuilder validationNow() {
+        this.validation = new Timestamp(System.currentTimeMillis());
         return this;
     }
 }
