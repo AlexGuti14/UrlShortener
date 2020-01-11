@@ -18,6 +18,11 @@ public class ClickService {
         this.clickRepository = clickRepository;
     }
 
+    
+    /** 
+     * @param hash
+     * @param ip
+     */
     public void saveClick(String hash, String ip) {
         Click cl = ClickBuilder.newInstance().hash(hash).createdNow().ip(ip).build();
         System.out.println(cl.getId());
@@ -25,7 +30,12 @@ public class ClickService {
         log.info(cl != null ? "[" + hash + "] saved with id [" + cl.getId() + "]" : "[" + hash + "] was not saved");
     }
 
-    // Funcion para devolver los click por hash
+    
+    /** 
+     * Funcion para devolver los click por hash
+     * @param hash
+     * @return Long
+     */
     public Long clicksByHash(String hash) {
         return clickRepository.clicksByHash(hash);
     }

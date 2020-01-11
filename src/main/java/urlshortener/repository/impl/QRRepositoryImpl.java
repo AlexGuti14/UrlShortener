@@ -30,8 +30,6 @@ public class QRRepositoryImpl implements QRRepository {
 			BitMatrix bitMatrix = qrCodeWriter.encode(text, BarcodeFormat.QR_CODE, width, height);
 			ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 			MatrixToImageWriter.writeToStream(bitMatrix, "png", byteArrayOutputStream);
-			System.out.println("Going to sleep for 5 Secs.. to simulate backend call.");
-            Thread.sleep(1000*5);
 			return byteArrayOutputStream.toByteArray();
 		} catch (Exception e) {
 			throw new QRNotGeneratedException("QR not generated");

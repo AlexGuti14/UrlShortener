@@ -21,22 +21,23 @@ public class ValidatorController {
         this.validatorService = validatorService;
     }
     
-    // TODO: verificar solo unas pocas que no se hayan verificado recientemente.
-    /* 
-     * Funcion que verifica de manera periodica diferentes urls recortadas
-     */ 
-    @Scheduled(fixedDelay = 50000 ) // Function will be executed X time after the last one finishes
+    
+    /** 
+     * Funcion que verifica de manera periodica las 10 urls recortadas que no se han verificado recientemente
+     * @throws IOException
+     */
+    @Scheduled(fixedDelay = 50000 ) // La función se ejecutará cada fixedDelay
 	public void VerificacionPeriodica() throws IOException {
         List<ShortURL> aDevolver = shortUrlService.listByValidation(10L, 0L);
         if (!aDevolver.isEmpty()){
             for (ShortURL elemento: aDevolver){
                 System.out.println(elemento.getHash());
-                // Check if the URI is reachable, delete from database if not. If it is reachable the ehcache is updated.
+                // Chequea si la url es alcanzable, elimina de la bbdd si no lo es
                 if(validatorService.validate(elemento.getTarget()) != "Constructable"){
                     shortUrlService.delete(elemento.getHash());
                 }
                 else {
-                    //Update new timestamp
+                    //Actualiza el timestamp de la url
                     shortUrlService.updateValidation(elemento);
                     validatorService.updateCache(elemento.getHash());
                 }

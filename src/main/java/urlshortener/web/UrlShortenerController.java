@@ -28,7 +28,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
 @RestController
 public class UrlShortenerController {
-    @Autowired
+
     private final ShortURLService shortUrlService;
     private final ValidatorService validatorService;
     private final GenerarQRService qr;
@@ -41,8 +41,12 @@ public class UrlShortenerController {
         this.qr = qr;
     }
 
-    /* 
+    
+    /** 
      * Función que suma click a una url
+     * @param id
+     * @param request
+     * @return ResponseEntity<?>
      */
     @RequestMapping(value = "/{id:(?!link|index).*}", method = RequestMethod.GET)
     public ResponseEntity<?> redirectTo(@PathVariable String id, HttpServletRequest request) {
@@ -57,8 +61,12 @@ public class UrlShortenerController {
     }
 
 
-    /* 
+    
+    /** 
      * Función que crea una url recortada a partir de una url original
+     * @param @RequestParam("url")
+     * @return ResponseEntity<ShortURL>
+     * @throws IOException
      */
     @RequestMapping(value = "/link", method = RequestMethod.POST)
     public ResponseEntity<ShortURL> shortener(@RequestParam("url") String url,
@@ -77,8 +85,12 @@ public class UrlShortenerController {
     }
 
 
-    /* 
+    
+    /** 
      * Función que crea todas las url recortadas a partir de un CSV
+     * @param @RequestParam("linklist[]"
+     * @return ResponseEntity<List<ShortURL>>
+     * @throws IOException
      */
     @RequestMapping(value = "/csv", method = RequestMethod.POST)
     public ResponseEntity<List<ShortURL>> SaveCSV(@RequestParam("linklist[]") String[] linklist,
@@ -96,8 +108,12 @@ public class UrlShortenerController {
         return new ResponseEntity<>(shortenedList, HttpStatus.CREATED);
     }
 
-    /* 
+    
+    /** 
      * Funcion que devuelve todas las url recortadas
+     * @return ResponseEntity<List<ShortURL>>
+     * @throws WriterException
+     * @throws IOException
      */
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public ResponseEntity<List<ShortURL>> listar() throws WriterException, IOException {
@@ -111,8 +127,14 @@ public class UrlShortenerController {
         return new ResponseEntity<>(aDevolver, HttpStatus.CREATED);
     }
 
-    /* 
+    
+    /** 
      * Funcion que devuelve el QR de una url recortada a partir de su hash
+     * @param hash
+     * @return ResponseEntity<ShortURL>
+     * @throws IOException
+     * @throws WriterException
+     * @throws URISyntaxException
      */
     @RequestMapping(value = "/qr", method = RequestMethod.GET)
     public ResponseEntity<ShortURL> crearQr(@RequestParam("hash") String hash) throws IOException, WriterException, URISyntaxException {
@@ -124,10 +146,20 @@ public class UrlShortenerController {
 
 
     
+    
+    /** 
+     * @param request
+     * @return String
+     */
     private String extractIP(HttpServletRequest request) {
         return request.getRemoteAddr();
     }
 
+    
+    /** 
+     * @param l
+     * @return ResponseEntity<?>
+     */
     private ResponseEntity<?> createSuccessfulRedirectToResponse(ShortURL l) {
         HttpHeaders h = new HttpHeaders();
         h.setLocation(URI.create(l.getTarget()));

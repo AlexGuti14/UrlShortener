@@ -14,6 +14,16 @@ public class GenerarQRService {
         this.QRRepository = QRRepository;
 	}
 	
+	
+	/** 
+	 * Genera el codigo QR
+	 * @param text
+	 * @param width
+	 * @param height
+	 * @return byte[]
+	 * @throws WriterException
+	 * @throws IOException
+	 */
 	public byte[] getQRCodeImage(String text, int width, int height) throws WriterException, IOException {
 		return QRRepository.getQR(text, width, height);
 	}

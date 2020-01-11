@@ -19,28 +19,56 @@ public class ShortURLService {
         this.shortURLRepository = shortURLRepository;
     }
 
+    
+    /** 
+     * @param id
+     * @return ShortURL
+     */
     public ShortURL findByKey(String id) {
         return shortURLRepository.findByKey(id);
     }
 
+    
+    /** 
+     * @param longitud
+     * @param offset
+     * @return List<ShortURL>
+     */
     // Funcion para listar
     public List<ShortURL> list(Long longitud, Long offset) {
         System.out.println("Ejecucion listar de ShortURLService");
         return shortURLRepository.list(longitud, offset);
     }
 
+    
+    /** 
+     * @param longitud
+     * @param offset
+     * @return List<ShortURL>
+     */
     // FUncion para listar por orden de validacion antigua
     public List<ShortURL> listByValidation(Long longitud, Long offset) {
         System.out.println("Ejecucion listar por validacion de ShortURLService");
         return shortURLRepository.listByValidation(longitud, offset);
     }
 
+    
+    /** 
+     * @param hash
+     */
     //Funcion para borrar un elemento
     public void delete(String hash) {
         System.out.println("Ejecucion Borrar de ShortURLService");
         shortURLRepository.delete(hash);
     }
 
+    
+    /** 
+     * @param url
+     * @param sponsor
+     * @param ip
+     * @return ShortURL
+     */
     public ShortURL save(String url, String sponsor, String ip) {
         ShortURL su = ShortURLBuilder.newInstance()
                 .target(url)
@@ -57,7 +85,11 @@ public class ShortURLService {
         return shortURLRepository.save(su);
     }
 
-    //Funcion para borrar un elemento
+    
+    /** 
+     * Funcion para borrar un elemento
+     * @param su
+     */
     public void updateValidation(ShortURL su) {
         System.out.println("Ejecucion actualizar de ShortURLService");
         shortURLRepository.updateValidation(su);;

@@ -12,11 +12,21 @@ import urlshortener.exceptions.*;
 public class ExceptionController extends ResponseEntityExceptionHandler  {
 
 
+   
+   /** 
+    * @param QRNotGeneratedException
+    * @return ResponseEntity<Object>
+    */
    @ExceptionHandler(value = QRNotGeneratedException.class)
    public ResponseEntity<Object> exception(QRNotGeneratedException ex) {
       return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
    }
 
+   
+   /** 
+    * @param ConectionRefusedException
+    * @return ResponseEntity<Object>
+    */
    @ExceptionHandler(value = ConectionRefusedException.class)
    public ResponseEntity<Object> exception(ConectionRefusedException ex) {
       return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);

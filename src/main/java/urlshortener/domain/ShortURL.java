@@ -40,66 +40,130 @@ public class ShortURL {
     public ShortURL() {
     }
 
+    
+    /** 
+     * @return String
+     */
     public String getHash() {
         return hash;
     }
 
+    
+    /** 
+     * @return String
+     */
     public String getTarget() {
         return target;
     }
 
+    
+    /** 
+     * @return URI
+     */
     public URI getUri() {
         return uri;
     }
 
+    
+    /** 
+     * @return Date
+     */
     public Date getCreated() {
         return created;
     }
 
+    
+    /** 
+     * @return String
+     */
     public String getOwner() {
         return owner;
     }
 
+    
+    /** 
+     * @return Integer
+     */
     public Integer getMode() {
         return mode;
     }
 
+    
+    /** 
+     * @return String
+     */
     public String getSponsor() {
         return sponsor;
     }
 
+    
+    /** 
+     * @return Boolean
+     */
     public Boolean getSafe() {
         return safe;
     }
 
+    
+    /** 
+     * @return String
+     */
     public String getIP() {
         return ip;
     }
 
+    
+    /** 
+     * @return String
+     */
     public String getCountry() {
         return country;
     }
 
+    
+    /** 
+     * @return Long
+     */
     public Long getClicks() {
         return clicks;
     }
 
+    
+    /** 
+     * @param clicks
+     */
     public void setClicks(Long clicks) {
         this.clicks = clicks;
     }
 
+    
+    /** 
+     * @return byte[]
+     */
     public byte[] getQR() {
         return qr;
     }
 
+    
+    /** 
+     * @param qr
+     */
     public void setQR(byte[] qr) {
         this.qr = qr;
     }
 
+    
+    /** 
+     * @return Timestamp
+     */
     public Timestamp getTimestamp(){
         return validation;
     }
 
+    
+    /** 
+     * @param val
+     */
     public void setTimestamp(Timestamp val) {
         this.validation = val;
     }

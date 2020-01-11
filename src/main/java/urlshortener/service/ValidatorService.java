@@ -11,6 +11,13 @@ import urlshortener.exceptions.ConectionRefusedException;
 
 @Service
 public class ValidatorService {
+    
+    /** 
+     * Valida una url
+     * @param url
+     * @return String
+     * @throws IOException
+     */
     public String validate(String url) throws IOException {
 
       HashMap<Integer, String> HTTPcodes = new HashMap<Integer, String>();
