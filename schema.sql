@@ -1,11 +1,13 @@
--- Clean database
+USE url;
+SET sql_mode = '';
 
-DROP TABLE CLICK IF EXISTS;
-DROP TABLE SHORTURL IF EXISTS;
+DROP TABLE IF EXISTS CLICK;
+DROP TABLE IF EXISTS SHORTURL;
+
 
 -- ShortURL
 
-CREATE TABLE SHORTURL
+CREATE TABLE IF NOT EXISTS SHORTURL
 (
     HASH    VARCHAR(30) PRIMARY KEY, -- Key
     TARGET  VARCHAR(1024),           -- Original URL
@@ -21,14 +23,15 @@ CREATE TABLE SHORTURL
 
 -- Click
 
-CREATE TABLE CLICK
+CREATE TABLE IF NOT EXISTS CLICK
 (
-    ID       BIGINT IDENTITY,                                             -- KEY
-    HASH     VARCHAR(10) NOT NULL FOREIGN KEY REFERENCES SHORTURL (HASH), -- Foreing key
+    ID       BIGINT AUTO_INCREMENT PRIMARY KEY,                                             -- KEY
+    HASH     VARCHAR(30),                                                 -- Foreing key
     CREATED  TIMESTAMP,                                                   -- Creation date
     REFERRER VARCHAR(1024),                                               -- Traffic origin
     BROWSER  VARCHAR(50),                                                 -- Browser
     PLATFORM VARCHAR(50),                                                 -- Platform
     IP       VARCHAR(20),                                                 -- IP
-    COUNTRY  VARCHAR(50)                                                  -- Country
+    COUNTRY  VARCHAR(50),                                                 -- Country
+    CONSTRAINT fk_hash FOREIGN KEY (HASH) REFERENCES SHORTURL(HASH)
 )

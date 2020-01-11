@@ -1,6 +1,7 @@
 package urlshortener.web;
 
 import org.apache.commons.validator.routines.UrlValidator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +28,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
 @RestController
 public class UrlShortenerController {
+    @Autowired
     private final ShortURLService shortUrlService;
     private final ValidatorService validatorService;
     private final GenerarQRService qr;
@@ -45,6 +47,7 @@ public class UrlShortenerController {
     @RequestMapping(value = "/{id:(?!link|index).*}", method = RequestMethod.GET)
     public ResponseEntity<?> redirectTo(@PathVariable String id, HttpServletRequest request) {
         ShortURL l = shortUrlService.findByKey(id);
+        System.out.println(id);
         if (l != null) {
             clickService.saveClick(id, extractIP(request));
             return createSuccessfulRedirectToResponse(l);

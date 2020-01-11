@@ -39,7 +39,7 @@ public class ClickRepositoryImpl implements ClickRepository {
     @Override
     public List<Click> findByHash(String hash) {
         try {
-            return jdbc.query("SELECT * FROM click WHERE hash=?",
+            return jdbc.query("SELECT * FROM CLICK WHERE HASH=?",
                     new Object[]{hash}, rowMapper);
         } catch (Exception e) {
             log.debug("When select for hash " + hash, e);
@@ -87,7 +87,7 @@ public class ClickRepositoryImpl implements ClickRepository {
         log.info("ID2: {} navegador: {} SO: {} Date: {}", cl.getId(), cl.getBrowser(), cl.getPlatform(), cl.getCreated());
         try {
             jdbc.update(
-                    "update click set hash=?, created=?, referrer=?, browser=?, platform=?, ip=?, country=? where id=?",
+                    "UPDATE CLICK SET HASH=?, CREATED=?, REFERRER=?, BROWSER=?, PLATFORM=?, IP=?, COUNTRY=? WHERE ID=?",
                     cl.getHash(), cl.getCreated(), cl.getReferrer(),
                     cl.getBrowser(), cl.getPlatform(), cl.getIp(),
                     cl.getCountry(), cl.getId());
@@ -100,7 +100,7 @@ public class ClickRepositoryImpl implements ClickRepository {
     @Override
     public void delete(Long id) {
         try {
-            jdbc.update("delete from click where id=?", id);
+            jdbc.update("DELETE FROM CLICK WHERE ID=?", id);
         } catch (Exception e) {
             log.debug("When delete for id " + id, e);
         }
@@ -109,7 +109,7 @@ public class ClickRepositoryImpl implements ClickRepository {
     @Override
     public void deleteAll() {
         try {
-            jdbc.update("delete from click");
+            jdbc.update("DELETE FROM CLICK");
         } catch (Exception e) {
             log.debug("When delete all", e);
         }
@@ -119,7 +119,7 @@ public class ClickRepositoryImpl implements ClickRepository {
     public Long count() {
         try {
             return jdbc
-                    .queryForObject("select count(*) from click", Long.class);
+                    .queryForObject("SELECT COUNT(*) FROM CLICK", Long.class);
         } catch (Exception e) {
             log.debug("When counting", e);
         }
@@ -129,7 +129,7 @@ public class ClickRepositoryImpl implements ClickRepository {
     @Override
     public List<Click> list(Long limit, Long offset) {
         try {
-            return jdbc.query("SELECT * FROM click LIMIT ? OFFSET ?",
+            return jdbc.query("SELECT * FROM CLICK LIMIT ? OFFSET ?",
                     new Object[]{limit, offset}, rowMapper);
         } catch (Exception e) {
             log.debug("When select for limit " + limit + " and offset "
@@ -142,7 +142,7 @@ public class ClickRepositoryImpl implements ClickRepository {
     public Long clicksByHash(String hash) {
         try {
             return jdbc
-                    .queryForObject("select count(*) from click where hash = ?", new Object[]{hash}, Long.class);
+                    .queryForObject("SELECT COUNT(*) FROM CLICK WHERE HASH = ?", new Object[]{hash}, Long.class);
         } catch (Exception e) {
             log.debug("When counting hash " + hash, e);
         }

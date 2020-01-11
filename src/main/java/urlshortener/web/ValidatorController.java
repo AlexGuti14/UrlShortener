@@ -30,6 +30,7 @@ public class ValidatorController {
         List<ShortURL> aDevolver = shortUrlService.listByValidation(10L, 0L);
         if (!aDevolver.isEmpty()){
             for (ShortURL elemento: aDevolver){
+                System.out.println(elemento.getHash());
                 // Check if the URI is reachable, delete from database if not. If it is reachable the ehcache is updated.
                 if(validatorService.validate(elemento.getTarget()) != "Constructable"){
                     shortUrlService.delete(elemento.getHash());

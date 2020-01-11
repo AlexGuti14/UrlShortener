@@ -20,6 +20,7 @@ public class ClickService {
 
     public void saveClick(String hash, String ip) {
         Click cl = ClickBuilder.newInstance().hash(hash).createdNow().ip(ip).build();
+        System.out.println(cl.getId());
         cl = clickRepository.save(cl);
         log.info(cl != null ? "[" + hash + "] saved with id [" + cl.getId() + "]" : "[" + hash + "] was not saved");
     }

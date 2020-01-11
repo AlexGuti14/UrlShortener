@@ -1,0 +1,51 @@
+version: '3.3'
+
+services:
+  web:
+    image: urlshortener:latest
+    ports: 
+        - 8080:8080
+    depends_on:
+        - mysql-url
+
+  mysql-url:
+    image: bitnami/mysql:8.0
+    container_name: mysql-url
+    restart: always
+    ports:
+      - 3306:3306
+    volumes:
+      - ./src/main/resources/sql/:/docker-entrypoint-initdb.d/
+      - mysql_master_data:/bitnami/mysql/data
+    environment:
+      # ALLOW_EMPTY_PASSWORD is recommended only for development.
+      MYSQL_DATABASE: url
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'true'
+      MYSQL_REPLICATION_MODE: master
+      MYSQL_REPLICATION_USER: repl_user
+      MYSQL_REPLICATION_PASSWORD: repl_password
+      MYSQL_ROOT_PASSWORD: root
+  
+  mysql-slave:
+    image: bitnami/mysql:8.0
+    container_name: mysql-slave
+    restart: always
+    ports:
+      - 3307:3306
+    depends_on:
+      - mysql-url
+    environment:
+      # ALLOW_EMPTY_PASSWORD is recommended only for development.
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'true'
+      MYSQL_REPLICATION_MODE: slave
+      MYSQL_REPLICATION_USER: repl_user
+      MYSQL_REPLICATION_PASSWORD: repl_password
+      MYSQL_MASTER_PORT_NUMBER: 3306
+      MYSQL_MASTER_HOST: mysql-url
+      MYSQL_DATABASE: url
+      MYSQL_MASTER_ROOT_PASSWORD: root
+
+# Names our volume
+volumes:
+  mysql_master_data:
+    driver: local

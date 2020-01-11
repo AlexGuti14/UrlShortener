@@ -39,7 +39,7 @@ public class ShortURLRepositoryImpl implements ShortURLRepository {
     @Override
     public ShortURL findByKey(String id) {
         try {
-            return jdbc.queryForObject("SELECT * FROM shorturl WHERE hash=?",
+            return jdbc.queryForObject("SELECT * FROM SHORTURL WHERE HASH=?",
                     rowMapper, id);
         } catch (Exception e) {
             log.debug("When select for key {}", id, e);
@@ -50,7 +50,7 @@ public class ShortURLRepositoryImpl implements ShortURLRepository {
     @Override
     public ShortURL save(ShortURL su) {
         try {
-            jdbc.update("INSERT INTO shorturl VALUES (?,?,?,?,?,?,?,?,?,?)",
+            jdbc.update("INSERT INTO SHORTURL VALUES (?,?,?,?,?,?,?,?,?,?)",
                     su.getHash(), su.getTarget(), su.getSponsor(),
                     su.getCreated(), su.getOwner(), su.getMode(), su.getSafe(),
                     su.getIP(), su.getCountry(), su.getTimestamp());
@@ -67,7 +67,7 @@ public class ShortURLRepositoryImpl implements ShortURLRepository {
     @Override
     public ShortURL mark(ShortURL su, boolean safeness) {
         try {
-            jdbc.update("UPDATE shorturl SET safe=? WHERE hash=?", safeness,
+            jdbc.update("UPDATE SHORTURL SET SAFE=? WHERE HASH=?", safeness,
                     su.getHash());
             ShortURL res = new ShortURL();
             BeanUtils.copyProperties(su, res);
@@ -83,7 +83,7 @@ public class ShortURLRepositoryImpl implements ShortURLRepository {
     public void update(ShortURL su) {
         try {
             jdbc.update(
-                    "update shorturl set target=?, sponsor=?, created=?, owner=?, mode=?, safe=?, ip=?, country=? where hash=?",
+                    "UPDATE SHORTURL SET TARGET=?, SPONSOR=?, CREATED=?, OWNER=?, MODE=?, SAFE=?, IP=?, COUNTRY=? WHERE HASH=?",
                     su.getTarget(), su.getSponsor(), su.getCreated(),
                     su.getOwner(), su.getMode(), su.getSafe(), su.getIP(),
                     su.getCountry(), su.getHash());
@@ -96,7 +96,7 @@ public class ShortURLRepositoryImpl implements ShortURLRepository {
     public void updateValidation(ShortURL su) {
         try {
             jdbc.update(
-                    "update shorturl set validation=? where hash=?",
+                    "UPDATE SHORTURL SET VALIDATION=? WHERE HASH=?",
                     new Timestamp(System.currentTimeMillis()), su.getHash());
         } catch (Exception e) {
             log.debug("When update for hash {}", su.getHash(), e);
@@ -107,7 +107,7 @@ public class ShortURLRepositoryImpl implements ShortURLRepository {
     @CacheEvict(value = "qrs", key = "#hash")
     public void delete(String hash) {
         try {
-            jdbc.update("delete from shorturl where hash=?", hash);
+            jdbc.update("DELETE FROM SHORTURL WHERE HASH=?", hash);
         } catch (Exception e) {
             log.debug("When delete for hash {}", hash, e);
         }
@@ -116,7 +116,7 @@ public class ShortURLRepositoryImpl implements ShortURLRepository {
     @Override
     public Long count() {
         try {
-            return jdbc.queryForObject("select count(*) from shorturl",
+            return jdbc.queryForObject("SELECT COUNT(*) FROM SHORTURL",
                     Long.class);
         } catch (Exception e) {
             log.debug("When counting", e);
@@ -127,7 +127,7 @@ public class ShortURLRepositoryImpl implements ShortURLRepository {
     @Override
     public List<ShortURL> list(Long limit, Long offset) {
         try {
-            return jdbc.query("SELECT * FROM shorturl LIMIT ? OFFSET ?",
+            return jdbc.query("SELECT * FROM SHORTURL LIMIT ? OFFSET ?",
                     new Object[]{limit, offset}, rowMapper);
         } catch (Exception e) {
             log.debug("When select for limit {} and offset {}", limit, offset, e);
@@ -138,7 +138,7 @@ public class ShortURLRepositoryImpl implements ShortURLRepository {
     @Override
     public List<ShortURL> listByValidation(Long limit, Long offset) {
         try {
-            return jdbc.query("SELECT * FROM shorturl ORDER BY validation ASC LIMIT ? OFFSET ?",
+            return jdbc.query("SELECT * FROM SHORTURL ORDER BY VALIDATION ASC LIMIT ? OFFSET ?",
                     new Object[]{limit, offset}, rowMapper);
         } catch (Exception e) {
             log.debug("When select for limit {} and offset {}", limit, offset, e);
@@ -149,7 +149,7 @@ public class ShortURLRepositoryImpl implements ShortURLRepository {
     @Override
     public List<ShortURL> findByTarget(String target) {
         try {
-            return jdbc.query("SELECT * FROM shorturl WHERE target = ?",
+            return jdbc.query("SELECT * FROM SHORTURL WHERE TARGET = ?",
                     new Object[]{target}, rowMapper);
         } catch (Exception e) {
             log.debug("When select for target " + target, e);
