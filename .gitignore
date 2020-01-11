@@ -5,7 +5,8 @@ bin/
 .classpath
 .vscode/
 
-
+# Ignore log file
+log.log
 
 # Ignore Gradle GUI config
 gradle-app.setting
