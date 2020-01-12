@@ -3,8 +3,11 @@ package urlshortener.service;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.HashMap;
-
+import com.squareup.okhttp.MediaType;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
+import com.squareup.okhttp.Response;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.stereotype.Service;
 import urlshortener.exceptions.ConectionRefusedException;
@@ -19,39 +22,18 @@ public class ValidatorService {
      * @throws IOException
      */
     public String validate(String url) throws IOException {
-
-      HashMap<Integer, String> HTTPcodes = new HashMap<Integer, String>();
-      HTTPcodes.put(400,"400: Bad Request");
-      HTTPcodes.put(401,"401: Unauthorized");
-      HTTPcodes.put(403,"403: Forbidden");
-      HTTPcodes.put(409,"409: Conflict");
-      HTTPcodes.put(410,"410: Gone");
-      HTTPcodes.put(500,"500: Internal Server Error");
-
-  		String result;
-  		int code;
-
-  		try {
-        URL siteURL = new URL(url);
-        HttpURLConnection connection = (HttpURLConnection) siteURL.openConnection();
-  			connection.setRequestMethod("GET");
-  			connection.setConnectTimeout(1000);
-        connection.connect();
-
-  			code = connection.getResponseCode();
-  			if (code >= 200 && code < 400) {
-  				result = "Constructable";
-          System.out.println(code);
-  			}
-        else{
-          result = HTTPcodes.get(code);
-        }
-  		} catch (IOException e) {
-            return "404: Not Found";
-          }
-  		return result;
-    }
-    
+      boolean Constructable = false;
+      OkHttpClient client = new OkHttpClient();
+      Request request = new Request.Builder()
+          .url(url)
+          .build();
+      Response response = client.newCall(request).execute();
+      if(response.isSuccessful() == true){
+        System.out.println(url);
+        return "Constructable";
+      }
+        return null;
+  }
     @CachePut(value = "qrs", key = "#hash")
     public void updateCache(String hash){}
 }

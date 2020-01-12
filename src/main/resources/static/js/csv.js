@@ -1,5 +1,8 @@
 $(document).ready(function (){
   $(viewCSV).click(function(){
+    var stompClient = null;
+    var generatedList = [];
+    var count = 1;
     var rd = new FileReader();
     rd.onload = function (e) {
 
@@ -11,25 +14,54 @@ $(document).ready(function (){
           filteredList.push(rows[i]);
         }
       }
-        $.ajax({
-            type: "POST",
-            url: "/csv",
-            data: {'linklist':filteredList},
-            success: function (generatedList) {
+
+      function connect() {
+          var socket = new SockJS('/links-websocket');
+          stompClient = Stomp.over(socket);
+          stompClient.connect({}, function (frame) {
+              console.log('Connected: ' + frame);
+              stompClient.subscribe("/topic/links", function (item) {
+              if(count < limit)
+              {
+                item = JSON.parse(item.body);
+                generatedList.push(item.target);
+                count++
+
+              }else
+              {
+                item = JSON.parse(item.body);
+                generatedList.push(item.target);
+                disconnect();
+                showLinks(generatedList);
+              }
+
+            });
+            var limit = filteredList.length;
+            for(var j = 0; j < filteredList.length; j++){
+               stompClient.send("/app/csv", {},filteredList[j]);
+            }
+          });
+      }
+
+      function showLinks(generatedList) {
               var saveURL="";
               for (var i = 0; i < generatedList.length; i++){
-                if(filteredList.includes(generatedList[i].target)){
-                  filteredList.splice(filteredList.indexOf(generatedList[i].target), 1 );
-                  saveURL += generatedList[i].target + "<br/>";
+                if(filteredList.includes(generatedList[i])){
+                  filteredList.splice(filteredList.indexOf(generatedList[i]), 1 );
+                  saveURL += generatedList[i] + "<br/>";
                 }
               }
               var w = window.open('about:blank', 'popup', 'width=450px,height=450px');
               w.document.write("Created URLs: <br/>" + saveURL);
-            },
-            error: function () {
-              console.log("Something happened D:");
             }
-        });
+
+      function disconnect() {
+          if (stompClient !== null) {
+              stompClient.disconnect();
+          }
+          console.log("Disconnected");
+      }
+      connect();
     }
     var CSVfiledata = $("#inputCSV")[0].files[0];
     if(CSVfiledata != null){

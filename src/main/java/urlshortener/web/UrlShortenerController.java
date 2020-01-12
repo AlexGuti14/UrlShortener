@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import urlshortener.domain.ShortURL;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 
 import urlshortener.service.ClickService;
 import urlshortener.service.GenerarQRService;
@@ -41,8 +43,12 @@ public class UrlShortenerController {
         this.qr = qr;
     }
 
+<<<<<<< Updated upstream
     
     /** 
+=======
+    /*
+>>>>>>> Stashed changes
      * Función que suma click a una url
      * @param id
      * @param request
@@ -61,8 +67,12 @@ public class UrlShortenerController {
     }
 
 
+<<<<<<< Updated upstream
     
     /** 
+=======
+    /*
+>>>>>>> Stashed changes
      * Función que crea una url recortada a partir de una url original
      * @param @RequestParam("url")
      * @return ResponseEntity<ShortURL>
@@ -73,7 +83,7 @@ public class UrlShortenerController {
             @RequestParam(value = "sponsor", required = false) String sponsor, HttpServletRequest request)
             throws IOException {
         UrlValidator urlValidator = new UrlValidator(new String[] { "http", "https" });
-        
+
         if (urlValidator.isValid(url) && validatorService.validate(url) == "Constructable") {
             ShortURL su = shortUrlService.save(url, sponsor, request.getRemoteAddr());
             HttpHeaders h = new HttpHeaders();
@@ -85,31 +95,34 @@ public class UrlShortenerController {
     }
 
 
+<<<<<<< Updated upstream
     
     /** 
+=======
+    /*
+>>>>>>> Stashed changes
      * Función que crea todas las url recortadas a partir de un CSV
      * @param @RequestParam("linklist[]"
      * @return ResponseEntity<List<ShortURL>>
      * @throws IOException
      */
-    @RequestMapping(value = "/csv", method = RequestMethod.POST)
-    public ResponseEntity<List<ShortURL>> SaveCSV(@RequestParam("linklist[]") String[] linklist,
-            @RequestParam(value = "sponsor", required = false) String sponsor, HttpServletRequest request)
-            throws IOException {
+    @MessageMapping("/csv")
+    @SendTo("/topic/links")
+    public ShortURL SaveCSV(String item) throws IOException {
         ShortURL su = new ShortURL();
-        List<ShortURL> shortenedList = new ArrayList<ShortURL>();
-        for (int i = 0; i < linklist.length; i++) {
-            UrlValidator urlValidator = new UrlValidator(new String[] { "http", "https" });
-            if (urlValidator.isValid(linklist[i]) && validatorService.validate(linklist[i]) == "Constructable") {
-                su = shortUrlService.save(linklist[i], sponsor, request.getRemoteAddr());
-                shortenedList.add(su);
-            }
+        UrlValidator urlValidator = new UrlValidator(new String[] { "http", "https" });
+        if (urlValidator.isValid(item) && validatorService.validate(item) == "Constructable") {
+            su = shortUrlService.save(item, null, null);
         }
-        return new ResponseEntity<>(shortenedList, HttpStatus.CREATED);
+        return su;
     }
 
+<<<<<<< Updated upstream
     
     /** 
+=======
+    /*
+>>>>>>> Stashed changes
      * Funcion que devuelve todas las url recortadas
      * @return ResponseEntity<List<ShortURL>>
      * @throws WriterException
@@ -127,8 +140,12 @@ public class UrlShortenerController {
         return new ResponseEntity<>(aDevolver, HttpStatus.CREATED);
     }
 
+<<<<<<< Updated upstream
     
     /** 
+=======
+    /*
+>>>>>>> Stashed changes
      * Funcion que devuelve el QR de una url recortada a partir de su hash
      * @param hash
      * @return ResponseEntity<ShortURL>
@@ -145,12 +162,16 @@ public class UrlShortenerController {
     }
 
 
+<<<<<<< Updated upstream
     
     
     /** 
      * @param request
      * @return String
      */
+=======
+
+>>>>>>> Stashed changes
     private String extractIP(HttpServletRequest request) {
         return request.getRemoteAddr();
     }

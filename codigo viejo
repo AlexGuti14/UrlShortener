@@ -1,0 +1,48 @@
+implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
+    compile 'org.webjars:webjars-locator-core'
+    compile 'org.webjars:stomp-websocket:2.3.3'
+    compile 'org.webjars:webjars-locator-core'
+
+
+
+
+
+
+@RequestMapping(value = "/csv", method = RequestMethod.POST)
+    public ResponseEntity<List<ShortURL>> SaveCSV(@RequestParam("linklist[]") String[] linklist,
+            @RequestParam(value = "sponsor", required = false) String sponsor, HttpServletRequest request)
+            throws IOException {
+        ShortURL su = new ShortURL();
+        List<ShortURL> shortenedList = new ArrayList<ShortURL>();
+        for (int i = 0; i < linklist.length; i++) {
+            UrlValidator urlValidator = new UrlValidator(new String[] { "http", "https" });
+            if (urlValidator.isValid(linklist[i]) && validatorService.validate(linklist[i]) == "Constructable") {
+                su = shortUrlService.save(linklist[i], sponsor, request.getRemoteAddr());
+                shortenedList.add(su);
+            }
+        }
+        return new ResponseEntity<>(shortenedList, HttpStatus.CREATED);
+    }
+
+
+      		try {
+            URL siteURL = new URL(url);
+            HttpURLConnection connection = (HttpURLConnection) siteURL.openConnection();
+      			connection.setRequestMethod("GET");
+      			connection.setConnectTimeout(1000);
+            connection.connect();
+
+      			code = connection.getResponseCode();
+      			if (code >= 200 && code < 400) {
+      				result = "Constructable";
+              System.out.println(code);
+      			}
+            else{
+              result = HTTPcodes.get(code);
+            }
+      		} catch (IOException e) {
+                return "404: Not Found";
+              }
+      		return result;
+        }

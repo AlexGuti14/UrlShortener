@@ -29,12 +29,17 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-hateoas'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-cache'
+    implementation "jakarta.xml.bind:jakarta.xml.bind-api:2.3.2"
+    implementation "org.glassfish.jaxb:jaxb-runtime:2.3.2"
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
 
     implementation 'commons-validator:commons-validator:1.6'
     implementation 'com.google.guava:guava:28.1-jre'
 
     runtime 'org.webjars:bootstrap:3.3.5'
     runtime 'org.webjars:jquery:2.1.4'
+    runtime 'org.webjars:sockjs-client:1.0.2'
+    runtime 'org.webjars:stomp-websocket:2.3.3'
 
     runtime 'org.hsqldb:hsqldb'
      // Use MySQL Connector-J
@@ -42,8 +47,14 @@ dependencies {
 
     compile "com.google.zxing:core:3.3.3"
     compile 'com.google.zxing:javase:3.3.3'
-    
-    
+    compile 'org.webjars:webjars-locator-core'
+    compile 'org.webjars:stomp-websocket:2.3.3'
+    compile 'org.webjars:webjars-locator-core'
+    compile 'com.squareup.okhttp:okhttp:2.2.0'
+    compile 'com.squareup.okhttp:okhttp-urlconnection:2.0.0'
+
+
+
     // https://mvnrepository.com/artifact/io.hawt/hawtio-springboot
     compile group: 'io.hawt', name: 'hawtio-springboot', version: '2.8.0'
     // Dependency for latest ehcache's version
