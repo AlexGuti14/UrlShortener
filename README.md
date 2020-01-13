@@ -13,11 +13,78 @@ The __project__ is a [Spring Boot](http://docs.spring.io/spring-boot/docs/curren
 
 The application can be run as follows:
 
+In DOCKER:
+
+1)
+/////////////Create .jar
 ```
-$ gradle bootRun
+.\gradlew build
 ```
 
-Gradle will compile project and then run it
+o
+
+```
+gradle build
+```
+
+2)
+/////////////Create docker image
+
+```
+docker build -t urlshortener .
+```
+
+3)
+/////////////Up docker-compose
+
+```
+docker-compose up -d
+```
+
+4)
+/////////////Copy .sql in docker container
+```
+docker cp schema.sql mysql-url:/schema.sql
+docker cp schema.sql mysql-slave:/schema.sql
+```
+
+5)
+/////////////Create tables in db
+```
+docker exec -i -t mysql /bin/bash
+mysql -uroot -proot url < schema.sql
+```
+
+
+
+
+DOWN DOCKER:
+1)
+/////////////Down docker-compose
+
+```
+docker-compose down -v
+```
+
+
+OTHER COMMANDS:
+
+docker images: view docker images
+
+docker ps: list of execute container
+
+docker rm: remove container
+
+docker rmi: remove image
+
+docker search: search image
+
+docker pull: download image
+
+
+
+
+
 Now you have a shortener service running at port 8080. 
 You can test that it works as follows:
 

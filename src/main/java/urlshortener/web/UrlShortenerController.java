@@ -43,12 +43,8 @@ public class UrlShortenerController {
         this.qr = qr;
     }
 
-<<<<<<< Updated upstream
     
     /** 
-=======
-    /*
->>>>>>> Stashed changes
      * Función que suma click a una url
      * @param id
      * @param request
@@ -67,12 +63,8 @@ public class UrlShortenerController {
     }
 
 
-<<<<<<< Updated upstream
     
     /** 
-=======
-    /*
->>>>>>> Stashed changes
      * Función que crea una url recortada a partir de una url original
      * @param @RequestParam("url")
      * @return ResponseEntity<ShortURL>
@@ -95,12 +87,8 @@ public class UrlShortenerController {
     }
 
 
-<<<<<<< Updated upstream
     
     /** 
-=======
-    /*
->>>>>>> Stashed changes
      * Función que crea todas las url recortadas a partir de un CSV
      * @param @RequestParam("linklist[]"
      * @return ResponseEntity<List<ShortURL>>
@@ -117,12 +105,8 @@ public class UrlShortenerController {
         return su;
     }
 
-<<<<<<< Updated upstream
     
     /** 
-=======
-    /*
->>>>>>> Stashed changes
      * Funcion que devuelve todas las url recortadas
      * @return ResponseEntity<List<ShortURL>>
      * @throws WriterException
@@ -140,12 +124,8 @@ public class UrlShortenerController {
         return new ResponseEntity<>(aDevolver, HttpStatus.CREATED);
     }
 
-<<<<<<< Updated upstream
     
     /** 
-=======
-    /*
->>>>>>> Stashed changes
      * Funcion que devuelve el QR de una url recortada a partir de su hash
      * @param hash
      * @return ResponseEntity<ShortURL>
@@ -162,16 +142,12 @@ public class UrlShortenerController {
     }
 
 
-<<<<<<< Updated upstream
     
     
     /** 
      * @param request
      * @return String
      */
-=======
-
->>>>>>> Stashed changes
     private String extractIP(HttpServletRequest request) {
         return request.getRemoteAddr();
     }
