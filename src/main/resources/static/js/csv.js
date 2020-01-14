@@ -6,6 +6,7 @@ $(document).ready(function (){
     var rd = new FileReader();
     rd.onload = function (e) {
 
+      //Procesado del CSV
       var rows = e.target.result.split("\n");
       var filteredList = [];
       for (var i = 0; i < rows.length; i++){
@@ -14,6 +15,8 @@ $(document).ready(function (){
           filteredList.push(rows[i]);
         }
       }
+
+      //Función que establece la conexión por medio de WebSocket.
 
       function connect() {
           var socket = new SockJS('/links-websocket');
@@ -43,6 +46,8 @@ $(document).ready(function (){
           });
       }
 
+      //Función que regresa los URLs acortados.
+
       function showLinks(generatedList) {
               var saveURL="";
               for (var i = 0; i < generatedList.length; i++){
@@ -55,6 +60,8 @@ $(document).ready(function (){
               w.document.write("Created URLs: <br/>" + saveURL);
             }
 
+      //Función que cierra la conexión de WebSocket.
+
       function disconnect() {
           if (stompClient !== null) {
               stompClient.disconnect();
@@ -63,6 +70,9 @@ $(document).ready(function (){
       }
       connect();
     }
+
+    //Procesado y control de los archivos subidos por el usuario.
+
     var CSVfiledata = $("#inputCSV")[0].files[0];
     if(CSVfiledata != null){
       if(CSVfiledata.name.includes(".csv")){

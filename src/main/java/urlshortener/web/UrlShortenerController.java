@@ -43,8 +43,8 @@ public class UrlShortenerController {
         this.qr = qr;
     }
 
-    
-    /** 
+
+    /**
      * Función que suma click a una url
      * @param id
      * @param request
@@ -63,8 +63,8 @@ public class UrlShortenerController {
     }
 
 
-    
-    /** 
+
+    /**
      * Función que crea una url recortada a partir de una url original
      * @param @RequestParam("url")
      * @return ResponseEntity<ShortURL>
@@ -88,10 +88,10 @@ public class UrlShortenerController {
 
 
     
-    /** 
+    /**
      * Función que crea todas las url recortadas a partir de un CSV
-     * @param @RequestParam("linklist[]"
-     * @return ResponseEntity<List<ShortURL>>
+     * @param String item
+     * @return Objeto ShortURL
      * @throws IOException
      */
     @MessageMapping("/csv")
@@ -105,8 +105,8 @@ public class UrlShortenerController {
         return su;
     }
 
-    
-    /** 
+
+    /**
      * Funcion que devuelve todas las url recortadas
      * @return ResponseEntity<List<ShortURL>>
      * @throws WriterException
@@ -124,8 +124,8 @@ public class UrlShortenerController {
         return new ResponseEntity<>(aDevolver, HttpStatus.CREATED);
     }
 
-    
-    /** 
+
+    /**
      * Funcion que devuelve el QR de una url recortada a partir de su hash
      * @param hash
      * @return ResponseEntity<ShortURL>
@@ -142,9 +142,9 @@ public class UrlShortenerController {
     }
 
 
-    
-    
-    /** 
+
+
+    /**
      * @param request
      * @return String
      */
@@ -152,8 +152,8 @@ public class UrlShortenerController {
         return request.getRemoteAddr();
     }
 
-    
-    /** 
+
+    /**
      * @param l
      * @return ResponseEntity<?>
      */
