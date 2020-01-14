@@ -46,7 +46,7 @@ docker-compose up -d
 docker cp schema.sql mysql-url:/schema.sql
 ```
 
-5) Create tables in master db
+5) Create tables in Master db. Automatically this db is copied in Slave container
 ```
 docker exec -i -t mysql-url /bin/bash
 mysql -uroot -proot url < schema.sql
