@@ -127,16 +127,4 @@ public class UrlShortenerTests {
                         null,
                         null));
     }
-
-    @Test
-    @Ignore
-    public void saveCSV_shouldReturnShortenedList() throws Exception{
-
-      String[] TestingArray = new String[3];
-      TestingArray[0] = "https://www.youtube.com/";
-      TestingArray[1] = "https://www.google.com/";
-      TestingArray[2] = "https://twitter.com/";
-      mockMvc.perform(post("/csv").param("linklist[]", TestingArray)).andExpect(status().isCreated());
-
-    }
 }
