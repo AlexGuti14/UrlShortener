@@ -19,11 +19,6 @@ The application can be run as follows:
 ### DOCKER:
 
 1) Create file .jar
-```
-.\gradlew build
-```
-
-or
 
 ```
 gradle build
