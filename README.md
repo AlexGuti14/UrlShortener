@@ -1,6 +1,7 @@
 # Web Engineering 2019-2020 / URL Shortener
 
 [![Build Status](https://travis-ci.org/AlexGuti14/UrlShortener.svg?branch=master)](https://travis-ci.org/AlexGuti14/UrlShortener)
+[![codecov](https://codecov.io/gh/AlexGuti14/UrlShortener/branch/master/graph/badge.svg)](https://codecov.io/gh/AlexGuti14/UrlShortener)
 [![Coverage Status](https://coveralls.io/repos/github/AlexGuti14/UrlShortener/badge.svg?branch=master)](https://coveralls.io/github/AlexGuti14/UrlShortener?branch=master)
 
 This is the start repository for the project developed in this course. 
