@@ -3,3 +3,6 @@ jdk: openjdk8
 
 before_install:
 - chmod a+x gradlew
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
